@@ -21,7 +21,7 @@ class ItemsList extends Component {
                     <div className="right floated content">
                     <button onClick={()=>this.onClickRemove(item._id)} className="ui button ">Clear</button>
                     </div>
-                    <div className="ui header">{item.note}</div>
+                    <div className="ui header" contentEditable="true">{item.note}</div>
                 </div>
 
             )

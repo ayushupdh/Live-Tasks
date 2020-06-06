@@ -4,16 +4,19 @@ import Notes from './Notes'
 import Login from './Login'
 import SignUp from './SignUp'
 import history from '../history'
-
+import NotesList from './NotesList'
 class App extends Component {
     render() {
         return (
             <div>
+                
                 <Router history={history}>
                     <Switch>
                         <Route path="/" exact component={Login}></Route>
                         <Route path="/signup" exact component={SignUp}></Route>
-                        <Route path="/notes" exact component={Notes}></Route>
+                        <Route path="/notes" exact component={NotesList}></Route>
+                        <Route path="/notes/:id" exact component={Notes}></Route>
+
                     </Switch>
                 </Router>
             </div>
