@@ -6,8 +6,8 @@ const notesSchema = new mongoose.Schema({
         default:'Title',
         trim:true
     },
-    notes:[{
-        note:{
+    itemsCollections:[{
+        item:{
             type:String,
         },
         completed:{
