@@ -12,8 +12,9 @@ import {Field,reduxForm} from 'redux-form'
                 <input
                 value ={input.value}
                 onChange={input.onChange}
+                placeholder="Add item"
                 ></input>
-                <button className="ui button">Add</button>
+                <button className="ui button ">Add</button>
              </div>
        )
    }

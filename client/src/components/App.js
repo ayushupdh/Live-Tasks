@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
-import AddItemsBar from './AddItemsBar'
-import ItemsList from './ItemsList'
-import CreateNote from './CreateNote';
+import {Router, Switch, Route} from 'react-router-dom'
+import Notes from './Notes'
+import Login from './Login'
+import SignUp from './SignUp'
+import history from '../history'
 
 class App extends Component {
     render() {
         return (
             <div>
-            <CreateNote></CreateNote>
-            <div className="ui raised very padded text container segment">
-                <h2>Notes</h2>
-              <AddItemsBar></AddItemsBar>
-              <ItemsList></ItemsList>
-            </div>
-
+                <Router history={history}>
+                    <Switch>
+                        <Route path="/" exact component={Login}></Route>
+                        <Route path="/signup" exact component={SignUp}></Route>
+                        <Route path="/notes" exact component={Notes}></Route>
+                    </Switch>
+                </Router>
             </div>
             
         )

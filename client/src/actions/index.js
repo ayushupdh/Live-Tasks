@@ -1,10 +1,9 @@
-import db from '../Apis/db'
+import db from '../apis/db'
 
 const noteId = '5ed8261fd3912f0c9ca85369'
 
 export const getItems = ()=>{
 
-   
     return(async(dispatch)=>{
         const response = await db.get(`/notes/`);
         dispatch({
@@ -16,9 +15,7 @@ export const getItems = ()=>{
 }
 
 export const addItem = (item)=>{
-
     const noteItem = {"note":item}
-   
     return(async(dispatch)=>{
         const response = await db.post(`/notes/${noteId}`, noteItem);
         dispatch({
