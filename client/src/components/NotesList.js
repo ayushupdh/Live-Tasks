@@ -1,16 +1,26 @@
 import React, { Component } from 'react'
 import Header from './Header'
+import {connect} from 'react-redux'
+import {addNote, getNotes} from '../actions'
 class NotesList extends Component {
+    
+    componentDidMount(){
+        this.props.getNotes()
+    }
+
+    renderCreateNote=()=>{
+        this.props.addNote()
+        console.log(this.props.notes);
+    }
+
     render() {
         return (
-                <div class="ui two column centered grid">
-                <div class="column">
+                <div className="ui two column centered grid">
+                <div className="column">
                 <Header></Header>
 
-                <div class="ui fluid action input ">
-                    <input type="text" placeholder="Add..." />
-                    <div class="ui button">Add</div>
-                </div>
+                <button onClick={this.renderCreateNote} className="positive ui button">Create a New Note</button>
+
                 </div>
             </div>
             
@@ -18,4 +28,11 @@ class NotesList extends Component {
     }
 }
 
-export default NotesList;
+const mapStatetoProps = (state)=>{
+    console.log(state);
+    return({
+        notes:state
+    })
+}
+
+export default  connect(mapStatetoProps, {addNote, getNotes})(NotesList);

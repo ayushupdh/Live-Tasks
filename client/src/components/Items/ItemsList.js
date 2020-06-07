@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {getItems,removeItem} from '../actions'
+import {getItems,removeItem} from '../../actions'
 
 class ItemsList extends Component {
     
@@ -15,13 +15,14 @@ class ItemsList extends Component {
         if(!this.props.listItemArray){
             return(<div>Add an Item to the List</div>)
         }
-        return this.props.listItemArray.map((item)=>{
+        return this.props.listItemArray.map((itemObject)=>{
+
             return(
-                <div className=" item" key= {item._id}>
+                <div className=" item" key= {itemObject._id}>
                     <div className="right floated content">
-                    <button onClick={()=>this.onClickRemove(item._id)} className="ui button ">Clear</button>
+                    <button onClick={()=>this.onClickRemove(itemObject._id)} className="ui button ">Clear</button>
                     </div>
-                    <div className="ui header" contentEditable="true">{item.note}</div>
+                    <div className="ui header" >{itemObject.item}</div>
                 </div>
 
             )

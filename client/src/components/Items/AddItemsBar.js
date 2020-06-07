@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {addItem} from '../actions'
+import {addItem} from '../../actions'
 import {Field,reduxForm} from 'redux-form'
 
  class SearchBox extends Component {

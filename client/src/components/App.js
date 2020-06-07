@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Router, Switch, Route} from 'react-router-dom'
-import Notes from './Notes'
+import Notes from './Items/Notes'
 import Login from './Login'
 import SignUp from './SignUp'
 import history from '../history'

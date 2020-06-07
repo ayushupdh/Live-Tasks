@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import AddItemsBar from './AddItemsBar'
 import ItemsList from './ItemsList'
-import history from '../history'
+import history from '../../history'
  class Notes extends Component {
     render() {
         return (
