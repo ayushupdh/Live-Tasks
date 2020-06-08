@@ -27,6 +27,16 @@ export const addNote = ()=>{
     })
 }
 
+export const removeNote = (noteId)=>{
+    return(async(dispatch)=>{
+         await db.delete(`/notes/${noteId}`)
+        dispatch({
+            type:'ADD_NOTE',
+            payload:noteId
+        })
+    })
+}
+
 
 
 

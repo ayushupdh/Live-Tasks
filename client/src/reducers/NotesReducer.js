@@ -11,7 +11,7 @@ export default (notes=[], action)=>{
         case 'ADD_TITLE':
             return  notes
         case 'REMOVE_NOTES':
-            return notes
+            return notes.filter(note => note._id!==action.payload)
         default:
             return notes
     }

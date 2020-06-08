@@ -5,5 +5,5 @@ import {reducer as formReducer} from 'redux-form'
 export default combineReducers({
         listItems:itemReducer,
         form: formReducer,
-        notes: notesReducers
+        noteList: notesReducers
 })
