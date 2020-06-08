@@ -6,7 +6,6 @@ export default (notes=[], action)=>{
         case 'GET_NOTES':
             return action.payload
         case 'ADD_NOTE':
-            console.log(notes);
             return [...notes, action.payload]
         case 'ADD_TITLE':
             return  notes

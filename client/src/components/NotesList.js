@@ -12,8 +12,8 @@ class NotesList extends Component {
     createNoteHelper=()=>{
         this.props.addNote()
     }
-    removeNoteHelper = ()=>{
-        return this.props.removeNote()
+    removeNoteHelper = (id)=>{
+        return this.props.removeNote(id)
     }
     
     renderNotesList = ()=>{
@@ -27,7 +27,7 @@ class NotesList extends Component {
                     <div className="ui middle aligned divided list" key={note._id}>
                     <div className="item">
                       <div className="right floated content">
-                        <div onClick={this.removeNoteHelper}className="ui button">Delete</div>
+                        <div onClick={()=>this.removeNoteHelper(note._id)}className="ui button">Delete</div>
                       </div>
                       <Link to={`/notes/${note._id}`}className="header">{note.title}</Link>
                     </div>
@@ -44,7 +44,10 @@ class NotesList extends Component {
                 <Header></Header>
 
                 <button onClick={this.createNoteHelper} className="positive ui button">Create a New Note</button>
+                
+                <div className=" ui segment">
                 {this.renderNotesList()}
+                </div>
                 </div>
             </div>
             
