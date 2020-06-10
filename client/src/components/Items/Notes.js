@@ -8,8 +8,8 @@ import history from '../../history'
             <div onClick={()=>history.push('/notes') }className="ui dimmer modals visible active">
             <div onClick={(e)=> e.stopPropagation()} className="ui standard modal visible active very padded text container segment ">
                 <h2>Notes</h2>
-              <AddItemsBar></AddItemsBar>
-              <ItemsList></ItemsList>
+              <AddItemsBar match= {this.props.match}></AddItemsBar>
+              <ItemsList match= {this.props.match}></ItemsList>
             </div>
             </div>
         )

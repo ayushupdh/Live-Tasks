@@ -18,15 +18,15 @@ import {Field,reduxForm} from 'redux-form'
              </div>
        )
    }
+
    onAddItemSubmit=(formValues)=>{
         if(Object.keys(formValues).length !==0){
-            this.props.addItem(formValues.inputListItem);
+            this.props.addItem(this.props.noteId, formValues.inputListItem);
             this.props.reset()
         }
        
    }
     render() {
-
         return (
             <div>
                 <form onSubmit={this.props.handleSubmit(this.onAddItemSubmit)}>
@@ -41,9 +41,10 @@ import {Field,reduxForm} from 'redux-form'
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state, ownProps)=>{  
+
     return({
-        state
+        noteId:ownProps.match.params.id
     })
 }
 

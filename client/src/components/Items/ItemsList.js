@@ -5,10 +5,10 @@ import {getItems,removeItem} from '../../actions'
 class ItemsList extends Component {
     
     onClickRemove=(id)=>{
-        this.props.removeItem(id)
+        this.props.removeItem(this.props.noteId,id)
     }
     componentDidMount(){
-        this.props.getItems()
+        this.props.getItems(this.props.noteId)
     }
 
     generateItem = ()=>{
@@ -36,9 +36,10 @@ class ItemsList extends Component {
         )
     }
 }
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state, ownProps)=>{
     return({
-        listItemArray: state.listItems
+        listItemArray: state.listItems,
+        noteId: ownProps.match.params.id
     })
 }
 export default connect(mapStateToProps,{removeItem, getItems})(ItemsList)

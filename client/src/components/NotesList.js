@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {addNote, getNotes,removeNote} from '../actions'
 import {Link} from 'react-router-dom'
 class NotesList extends Component {
+
     
     componentDidMount(){
         this.props.getNotes()
@@ -18,7 +19,7 @@ class NotesList extends Component {
     
     renderNotesList = ()=>{
         if(this.props.noteList.length===0){
-            return(<div>Loading...</div>)
+            return(<div>Press Create Notes to start creating notes</div>)
         }
         return(
             this.props.noteList.map((note)=>{
@@ -29,7 +30,7 @@ class NotesList extends Component {
                       <div className="right floated content">
                         <div onClick={()=>this.removeNoteHelper(note._id)}className="ui button">Delete</div>
                       </div>
-                      <Link to={`/notes/${note._id}`}className="header">{note.title}</Link>
+                      <Link to={`/notes/${note._id}`}  className="header">{note.title}</Link>
                     </div>
                     </div>
                 )
@@ -43,7 +44,7 @@ class NotesList extends Component {
                 <div className="column">
                 <Header></Header>
 
-                <button onClick={this.createNoteHelper} className="positive ui button">Create a New Note</button>
+                <button onClick={this.createNoteHelper} className="positive ui button">Create Notes</button>
                 
                 <div className=" ui segment">
                 {this.renderNotesList()}
