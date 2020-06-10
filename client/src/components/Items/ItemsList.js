@@ -10,7 +10,6 @@ class ItemsList extends Component {
     componentDidMount(){
         this.props.getItems(this.props.noteId)
     }
-
     generateItem = ()=>{
         if(!this.props.listItemArray){
             return(<div>Add an Item to the List</div>)
