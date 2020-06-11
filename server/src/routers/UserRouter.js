@@ -1,7 +1,7 @@
 const express = require('express')
 const Users = require('../modals/Users')
 const router = new express.Router()
-
+const auth  = require('../middleware/auth')
 
 router.post('/users',async(req,res)=>{
     try {
@@ -11,7 +11,45 @@ router.post('/users',async(req,res)=>{
 
         res.send({user, token})
     } catch (error) {
+        res.sendStatus(500)
+    }
+})
+
+router.post('/users/login',async(req,res)=>{
+     const email = req.body.email
+     const password = req.body.password
+    try {
+        const user = await Users.findByCredentials(email, password)
+        const token = await user.generateToken()
+
+        res.send({user, token})
+    } catch (error) {
         console.log(error);
+        res.sendStatus(404)
+    }
+})
+
+router.post('/users/logout',auth,async(req,res)=>{
+
+   try {
+    req.user.tokens = req.user.tokens.filter((token)=>{
+           return token.token !== req.token
+       })
+       await req.user.save()
+       res.send(req.user)
+
+   } catch (error) {
+       console.log(error);
+       res.sendStatus(404)
+   }
+})
+
+
+router.get('/users/me',auth, async(req,res)=>{
+    try {
+        const user =req.user
+        res.send(user)
+    } catch (error) {
         res.sendStatus(500)
     }
 })
@@ -35,7 +73,7 @@ router.delete('/users/:id' , async(req,res)=>{
         }
 
 })
-router.delete('/users' , async(req,res)=>{
+router.delete('/users', async(req,res)=>{
     try{
     await Users.deleteMany()
     res.status(200).send({})
