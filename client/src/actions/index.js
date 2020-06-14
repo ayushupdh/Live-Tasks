@@ -1,6 +1,7 @@
 import db from "../apis/db";
 import history from "../history";
 
+///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch) => {
     const response = await db.get("/notes");
@@ -22,6 +23,16 @@ export const addNote = () => {
     history.push(`/notes/${response.data._id}`);
   };
 };
+export const editTitle = (noteId, title) => {
+  return async (dispatch) => {
+    const response = await db.patch(`/notes/${noteId}`, { title });
+    dispatch({
+      type: "EDIT_TITLE",
+      payload: response.data,
+    });
+    history.push(`/notes/${response.data._id}`);
+  };
+};
 
 export const removeNote = (noteId) => {
   return async (dispatch) => {
@@ -33,6 +44,7 @@ export const removeNote = (noteId) => {
   };
 };
 
+/////////////////// Items  ////////////////
 export const getItems = (noteId) => {
   return async (dispatch) => {
     const response = await db.get(`/notes/${noteId}`);
