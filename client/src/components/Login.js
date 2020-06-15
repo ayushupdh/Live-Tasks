@@ -1,32 +1,51 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-// import './auth.css'
+import { signinUser } from "../actions/userActions";
 
 class Login extends Component {
-  generateBoxes = ({ label, input }) => {
-    console.log(this.props);
+  generateBoxes = ({ label, input, type }) => {
     return (
       <div className=" ">
         <label>{label}</label>
-        <input {...input} className="form-control"></input>
+        <input
+          {...input}
+          className="form-control"
+          type={type}
+          autoComplete="on"
+        ></input>
       </div>
     );
   };
-
+  handleError() {
+    console.log("Handle input error");
+  }
+  onSubmitHelper = (formValues) => {
+    if (!formValues.email || !formValues.password) {
+      return this.handleError();
+    } else {
+      this.props.signinUser(formValues);
+    }
+  };
   render() {
     return (
       <div className=" mx-auto  w-50  border mt-4 p-5">
         <h1 className="text-center pb-5">Live Tasks</h1>
-        <form className="form-group">
+        <form
+          className="form-group"
+          onSubmit={this.props.handleSubmit(this.onSubmitHelper)}
+        >
           <h4> Login</h4>
           <Field
-            name="username"
+            name="email"
+            type="text"
             component={this.generateBoxes}
-            label="UserName"
+            label="Email"
           ></Field>
           <Field
             name="password"
+            type="password"
             component={this.generateBoxes}
             label="Password"
           ></Field>
@@ -42,6 +61,8 @@ class Login extends Component {
   }
 }
 
-export default reduxForm({
+const form = reduxForm({
   form: "AuthForm",
 })(Login);
+
+export default connect(null, { signinUser })(form);

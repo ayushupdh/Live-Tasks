@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Header";
 import { connect } from "react-redux";
-import { addNote, getNotes, removeNote } from "../actions";
+import { addNote, getNotes, removeNote } from "../actions/notesActions";
 import { Link } from "react-router-dom";
 class NotesList extends Component {
   componentDidMount() {

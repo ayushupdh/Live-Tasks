@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getItems, removeItem, editItem } from "../../actions";
+import { getItems, removeItem, editItem } from "../../actions/notesActions";
 
 class ItemsList extends Component {
   onClickRemove = (id) => {

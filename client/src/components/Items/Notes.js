@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import AddItemsBar from "./AddItemsBar";
 import ItemsList from "./ItemsList";
 import history from "../../history";
-import { getNotes, editTitle } from "../../actions";
+import { getNotes, editTitle } from "../../actions/notesActions";
 
 class Notes extends Component {
   constructor(props) {
