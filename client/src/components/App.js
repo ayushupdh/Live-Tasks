@@ -5,10 +5,11 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import history from "../history";
 import NotesList from "./NotesList";
+import "./App.css";
 class App extends Component {
   render() {
     return (
-      <div>
+      <div className="container main-container">
         <Router history={history}>
           <Switch>
             <Route path="/" exact component={Login}></Route>

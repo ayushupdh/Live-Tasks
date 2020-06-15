@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import AddItemsBar from "./AddItemsBar";
 import ItemsList from "./ItemsList";
@@ -45,33 +46,46 @@ class Notes extends Component {
     return this.props.title;
   }
   render() {
-    return (
+    return ReactDOM.createPortal(
       <div
         onClick={() => history.push("/notes")}
-        className="ui dimmer modals visible active"
+        className="min-vh-100 d-inline-block w-100 bg-light"
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="ui standard modal visible active  padded text container segment "
+          className=" w-50 mx-auto border mt-5 p-3 rounded bg-white"
         >
-          <div
-            style={{
-              outline: 0,
-            }}
-            onFocus={this.focusHelper}
-            ref={this.divRef}
-            suppressContentEditableWarning={true}
-            className="header"
-            contentEditable={true}
-            onBlur={(e) => this.onEditHandler(e.target.innerHTML)}
-            placeholder="Title"
-          >
-            {this.titleHelper()}
+          <div className="p-2">
+            <div className="clearfix">
+              <div
+                style={{
+                  outline: 0,
+                }}
+                onFocus={this.focusHelper}
+                ref={this.divRef}
+                suppressContentEditableWarning={true}
+                className="h4 mb-4 float-left"
+                contentEditable={true}
+                onBlur={(e) => this.onEditHandler(e.target.innerHTML)}
+                placeholder="Title"
+              >
+                {this.titleHelper()}
+              </div>
+              <button
+                onClick={() => history.push("/notes")}
+                type="button"
+                class="close"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <AddItemsBar match={this.props.match}></AddItemsBar>
+            <ItemsList match={this.props.match}></ItemsList>
           </div>
-          <AddItemsBar match={this.props.match}></AddItemsBar>
-          <ItemsList match={this.props.match}></ItemsList>
         </div>
-      </div>
+      </div>,
+      document.querySelector("#modal")
     );
   }
 }

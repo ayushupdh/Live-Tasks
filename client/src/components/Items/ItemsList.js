@@ -18,13 +18,18 @@ class ItemsList extends Component {
     }
     return this.props.listItemArray.map((itemObject) => {
       return (
-        <div className=" item" key={itemObject._id}>
-          <div className="right floated content">
+        <div
+          className="mb-2 shadow-sm border clearfix p-3 rounded "
+          key={itemObject._id}
+        >
+          <div className="">
             <button
               onClick={() => this.onClickRemove(itemObject._id)}
-              className="ui button "
+              type="button"
+              class="close"
+              aria-label="Close"
             >
-              Clear
+              <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div
@@ -45,11 +50,7 @@ class ItemsList extends Component {
     });
   };
   render() {
-    return (
-      <div className="ui middle aligned divided list">
-        {this.generateItem()}
-      </div>
-    );
+    return <div className="">{this.generateItem()}</div>;
   }
 }
 const mapStateToProps = (state, ownProps) => {

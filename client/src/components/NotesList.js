@@ -21,19 +21,22 @@ class NotesList extends Component {
     }
     return this.props.noteList.map((note) => {
       return (
-        <div className="ui middle aligned divided list" key={note._id}>
-          <div className="item">
-            <div className="right floated content">
-              <div
-                onClick={() => this.removeNoteHelper(note._id)}
-                className="ui button"
-              >
-                Delete
-              </div>
-            </div>
-            <Link to={`/notes/${note._id}`} className="header">
-              {note.title}
-            </Link>
+        <div
+          className="mb-2 shadow-sm border clearfix p-3 rounded"
+          key={note._id}
+        >
+          <Link to={`/notes/${note._id}`} className="float-left h5 text-body">
+            {note.title}
+          </Link>
+          <div className="float-right">
+            <button
+              onClick={() => this.removeNoteHelper(note._id)}
+              type="button"
+              class="close"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
         </div>
       );
@@ -41,18 +44,20 @@ class NotesList extends Component {
   };
   render() {
     return (
-      <div className="ui two column centered grid">
-        <div className="column">
-          <Header></Header>
+      <div>
+        <Header></Header>
+        <div className="shadow-sm border p-5 rounded">
+          <div className="mb-4 ">
+            <button
+              type="button"
+              onClick={this.createNoteHelper}
+              className="btn btn-success"
+            >
+              Create Notes
+            </button>
+          </div>
 
-          <button
-            onClick={this.createNoteHelper}
-            className="positive ui button"
-          >
-            Create Notes
-          </button>
-
-          <div className=" ui segment">{this.renderNotesList()}</div>
+          <div className=" ">{this.renderNotesList()}</div>
         </div>
       </div>
     );

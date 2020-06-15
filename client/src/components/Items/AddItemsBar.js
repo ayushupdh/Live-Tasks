@@ -1,53 +1,49 @@
-import React, { Component } from 'react'
-import {connect} from 'react-redux'
-import {addItem} from '../../actions'
-import {Field,reduxForm} from 'redux-form'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { addItem } from "../../actions";
+import { Field, reduxForm } from "redux-form";
 
- class SearchBox extends Component {
+class SearchBox extends Component {
+  renderinputListItem = ({ input }) => {
+    return (
+      <div className="mb-4 input-group">
+        <input
+          className="form-control"
+          value={input.value}
+          onChange={input.onChange}
+          placeholder="Add item"
+        ></input>
+        <button className="btn btn-outline-success">Add</button>
+      </div>
+    );
+  };
 
-
-   renderinputListItem=({input})=>{
-       return(
-            <div className="ui fluid action input">
-                <input
-                value ={input.value}
-                onChange={input.onChange}
-                placeholder="Add item"
-                ></input>
-                <button className="ui button ">Add</button>
-             </div>
-       )
-   }
-
-   onAddItemSubmit=(formValues)=>{
-        if(Object.keys(formValues).length !==0){
-            this.props.addItem(this.props.noteId, formValues.inputListItem);
-            this.props.reset()
-        }
-       
-   }
-    render() {
-        return (
-            <div>
-                <form onSubmit={this.props.handleSubmit(this.onAddItemSubmit)}>
-                <Field
-                name="inputListItem"
-                component={this.renderinputListItem}
-                >
-                </Field>
-                </form>
-            </div>  
-        )
+  onAddItemSubmit = (formValues) => {
+    if (Object.keys(formValues).length !== 0) {
+      this.props.addItem(this.props.noteId, formValues.inputListItem);
+      this.props.reset();
     }
+  };
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.props.handleSubmit(this.onAddItemSubmit)}>
+          <Field
+            name="inputListItem"
+            component={this.renderinputListItem}
+          ></Field>
+        </form>
+      </div>
+    );
+  }
 }
 
-const mapStateToProps = (state, ownProps)=>{  
+const mapStateToProps = (state, ownProps) => {
+  return {
+    noteId: ownProps.match.params.id,
+  };
+};
 
-    return({
-        noteId:ownProps.match.params.id
-    })
-}
+const formWrapper = reduxForm({ form: "addItemForm" })(SearchBox);
 
-const formWrapper = reduxForm({form: 'addItemForm'})(SearchBox)
-
-export default connect(mapStateToProps,{addItem})(formWrapper)
+export default connect(mapStateToProps, { addItem })(formWrapper);
