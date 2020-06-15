@@ -13,7 +13,7 @@ class SearchBox extends Component {
           onChange={input.onChange}
           placeholder="Add item"
         ></input>
-        <button className="btn btn-outline-success">Add</button>
+        <button className="btn btn-success">Add</button>
       </div>
     );
   };

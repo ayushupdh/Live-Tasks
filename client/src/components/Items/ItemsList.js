@@ -22,22 +22,28 @@ class ItemsList extends Component {
           className="mb-2 shadow-sm border clearfix p-3 rounded "
           key={itemObject._id}
         >
-          <div className="">
+          <input
+            className="form-check-input ml-1"
+            type="checkbox"
+            aria-label="Checkbox "
+          />
+          <div>
             <button
               onClick={() => this.onClickRemove(itemObject._id)}
               type="button"
-              class="close"
+              className="close"
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
           <div
             style={{
               outline: "0px solid transparent",
             }}
             suppressContentEditableWarning={true}
-            className="ui header"
+            className="ml-4"
             contentEditable={true}
             onBlur={(e) =>
               this.onClickEdit(itemObject._id, e.currentTarget.textContent)

@@ -7,10 +7,11 @@ const router = new express.Router();
 //Create a note
 router.post("/notes", async (req, res) => {
   try {
-    const notes = new Notes(req.body);
+    const notes = new Notes({ ...req.body, owner: "5ee7be58292f2f3540d8fa2e" });
     await notes.save();
     res.status(200).send(notes);
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -30,6 +31,7 @@ router.get("/notes/:id", async (req, res) => {
   const noteId = req.params.id;
   try {
     const notes = await Notes.findById(noteId);
+    // await notes.populate("owner").execPopulate(); //Get the owners info
 
     res.status(200).send(notes);
   } catch (e) {
