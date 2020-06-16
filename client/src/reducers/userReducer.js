@@ -18,8 +18,8 @@ export default (state = initialState, action) => {
     case SIGN_UP:
       localStorage.setItem("token", action.payload._id);
       return {
-        userToken: action.payload._id,
-        user: action.payload,
+        userToken: action.payload.token,
+        user: action.payload.user,
       };
     case SIGN_OUT:
       localStorage.removeItem("token");

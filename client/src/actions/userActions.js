@@ -61,7 +61,7 @@ export const signupUser = (userInfo) => {
       console.log(response.data);
       dispatch({
         type: SIGN_UP,
-        payload: response.data.user,
+        payload: response.data,
       });
       history.push("/notes");
     } catch (error) {

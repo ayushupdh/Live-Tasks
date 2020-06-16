@@ -74,7 +74,7 @@ class Notes extends Component {
               <button
                 onClick={() => history.push("/notes")}
                 type="button"
-                class="close"
+                className="close"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
