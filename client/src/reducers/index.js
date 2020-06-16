@@ -1,11 +1,14 @@
 import { combineReducers } from "redux";
+import { reducer as formReducer } from "redux-form";
+
 import itemReducer from "./itemReducer";
 import notesReducers from "./notesReducer";
 import userReducer from "./userReducer";
-import { reducer as formReducer } from "redux-form";
+import errorReducer from "./errorReducer";
 export default combineReducers({
   listItems: itemReducer,
   form: formReducer,
   noteList: notesReducers,
-  userObject: userReducer,
+  user: userReducer,
+  error: errorReducer,
 });

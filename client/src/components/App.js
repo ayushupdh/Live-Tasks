@@ -5,8 +5,13 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import history from "../history";
 import NotesList from "./NotesList";
+import { store } from "../store";
 import "./App.css";
+import { loadUser } from "../actions/userActions";
 class App extends Component {
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
   render() {
     return (
       <div className="container main-container">

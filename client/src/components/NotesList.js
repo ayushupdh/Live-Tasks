@@ -32,7 +32,7 @@ class NotesList extends Component {
             <button
               onClick={() => this.removeNoteHelper(note._id)}
               type="button"
-              class="close"
+              className="close"
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>

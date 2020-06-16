@@ -58,7 +58,7 @@ class Login extends Component {
             component={this.generateBoxes}
             label="Password"
           ></Field>
-          {console.log(this.props)}
+
           {this.props.authError && this.props.anyTouched && (
             <p className="text-danger">{this.props.authError}</p>
           )}
@@ -76,7 +76,7 @@ class Login extends Component {
 
 const mapStatetoProps = (state) => {
   return {
-    authError: state.userObject.error,
+    authError: state.error,
   };
 };
 const form = reduxForm({

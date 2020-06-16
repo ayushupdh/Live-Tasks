@@ -12,7 +12,8 @@ import {
 } from "./types";
 ///////////////    Notes ////////////////
 export const getNotes = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    console.log(getState().user);
     const response = await db.get("/notes");
     dispatch({
       type: GET_NOTES,

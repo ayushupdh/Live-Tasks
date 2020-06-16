@@ -1,23 +1,31 @@
-import { SIGN_IN, SIGN_UP, USER_ERROR } from "../actions/types";
+import { SIGN_IN, SIGN_UP, SIGN_OUT, LOAD_USER } from "../actions/types";
 
-const initialState = { user: null, error: null };
+const initialState = { userToken: localStorage.getItem("token"), user: null };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case USER_ERROR:
+    case LOAD_USER:
       return {
-        error: action.payload,
-        user: null,
+        userToken: localStorage.getItem("token"),
+        user: action.payload,
       };
     case SIGN_IN:
+      localStorage.setItem("token", action.payload.token);
       return {
-        error: null,
-        user: action.payload,
+        userToken: action.payload.token,
+        user: action.payload.user,
       };
     case SIGN_UP:
+      localStorage.setItem("token", action.payload._id);
       return {
-        error: null,
+        userToken: action.payload._id,
         user: action.payload,
+      };
+    case SIGN_OUT:
+      localStorage.removeItem("token");
+      return {
+        userToken: null,
+        user: null,
       };
     default:
       return state;
