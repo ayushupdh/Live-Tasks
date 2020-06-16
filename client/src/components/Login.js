@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, SubmissionError } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { signinUser } from "../actions/userActions";
 
 class Login extends Component {
-  generateBoxes = ({ label, input, type }) => {
+  generateBoxes = ({ label, input, meta, type }) => {
     return (
-      <div className=" ">
+      <div className="p-2 ">
         <label>{label}</label>
         <input
           {...input}
@@ -15,15 +15,24 @@ class Login extends Component {
           type={type}
           autoComplete="on"
         ></input>
+        {meta.error && meta.touched && (
+          <p className="text-danger m-0">{meta.error}</p>
+        )}
       </div>
     );
   };
-  handleError() {
-    console.log("Handle input error");
-  }
+
   onSubmitHelper = (formValues) => {
-    if (!formValues.email || !formValues.password) {
-      return this.handleError();
+    if (!formValues.email) {
+      throw new SubmissionError({
+        email: "Please enter email",
+        _error: "No Input Provided",
+      });
+    } else if (!formValues.password) {
+      throw new SubmissionError({
+        password: "Please enter password",
+        _error: "No Input Provided",
+      });
     } else {
       this.props.signinUser(formValues);
     }
@@ -39,7 +48,7 @@ class Login extends Component {
           <h4> Login</h4>
           <Field
             name="email"
-            type="text"
+            type="email"
             component={this.generateBoxes}
             label="Email"
           ></Field>
@@ -49,11 +58,15 @@ class Login extends Component {
             component={this.generateBoxes}
             label="Password"
           ></Field>
+          {console.log(this.props)}
+          {this.props.authError && this.props.anyTouched && (
+            <p className="text-danger">{this.props.authError}</p>
+          )}
           <button className="btn btn-success btn-block mt-4">Login</button>
         </form>
         <div className="">
           <Link to="/signup" className="btn btn-info btn-block mt-4">
-            Sign Up
+            Sign Up Instead...
           </Link>
         </div>
       </div>
@@ -61,8 +74,13 @@ class Login extends Component {
   }
 }
 
+const mapStatetoProps = (state) => {
+  return {
+    authError: state.userObject.error,
+  };
+};
 const form = reduxForm({
   form: "AuthForm",
 })(Login);
 
-export default connect(null, { signinUser })(form);
+export default connect(mapStatetoProps, { signinUser })(form);

@@ -1,12 +1,25 @@
-import { SIGN_IN, SIGN_UP } from "../actions/types";
+import { SIGN_IN, SIGN_UP, USER_ERROR } from "../actions/types";
 
-export default (user = {}, action) => {
+const initialState = { user: null, error: null };
+
+export default (state = initialState, action) => {
   switch (action.type) {
+    case USER_ERROR:
+      return {
+        error: action.payload,
+        user: null,
+      };
     case SIGN_IN:
-      return user;
+      return {
+        error: null,
+        user: action.payload,
+      };
     case SIGN_UP:
-      return user;
+      return {
+        error: null,
+        user: action.payload,
+      };
     default:
-      return user;
+      return state;
   }
 };

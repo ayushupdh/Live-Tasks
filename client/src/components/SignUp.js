@@ -1,30 +1,46 @@
 import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, SubmissionError } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { signupUser } from "../actions/userActions";
 
 class SignUp extends Component {
-  generateBoxes = ({ label, input }) => {
+  generateBoxes = ({ label, input, type, meta: { touched, error } }) => {
     return (
-      <div className="p-1">
+      <div className="p-2">
         <label>{label}</label>
-        <input {...input} className="form-control" autoComplete="on" />
+        <input
+          {...input}
+          type={type}
+          className="form-control"
+          autoComplete="on"
+        />
+        {error && touched && <p className="text-danger m-0">{error}</p>}
       </div>
     );
   };
 
-  handleError() {
-    console.log("Handle input error");
-  }
   onSubmitHelper = (formValues) => {
-    if (
-      !formValues.email ||
-      !formValues.password ||
-      !formValues.username ||
-      !formValues.name
-    ) {
-      return this.handleError();
+    if (!formValues.name) {
+      throw new SubmissionError({
+        name: "Please enter name",
+        _error: "No Input Provided",
+      });
+    } else if (!formValues.username) {
+      throw new SubmissionError({
+        username: "Please enter username",
+        _error: "No Input Provided",
+      });
+    } else if (!formValues.email) {
+      throw new SubmissionError({
+        email: "Please enter email",
+        _error: "No Input Provided",
+      });
+    } else if (!formValues.password) {
+      throw new SubmissionError({
+        password: "Please enter password",
+        _error: "No Input Provided",
+      });
     } else {
       this.props.signupUser(formValues);
     }
@@ -46,6 +62,7 @@ class SignUp extends Component {
           ></Field>
           <Field
             name="email"
+            type="email"
             component={this.generateBoxes}
             label="Email"
           ></Field>
@@ -56,6 +73,7 @@ class SignUp extends Component {
           ></Field>
           <Field
             name="password"
+            type="password"
             component={this.generateBoxes}
             label="Password"
           ></Field>
@@ -68,7 +86,7 @@ class SignUp extends Component {
         </form>
         <div className="">
           <Link to="/" className="btn btn-success btn-block">
-            Login
+            Login Instead...
           </Link>
         </div>
       </div>

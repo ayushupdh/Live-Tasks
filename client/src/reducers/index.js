@@ -7,5 +7,5 @@ export default combineReducers({
   listItems: itemReducer,
   form: formReducer,
   noteList: notesReducers,
-  user: userReducer,
+  userObject: userReducer,
 });
