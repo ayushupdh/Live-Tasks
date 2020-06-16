@@ -1,6 +1,6 @@
 const User = require("../modals/User");
 const jwt = require("jsonwebtoken");
-
+// const axios = require("axios");
 const auth = async (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
@@ -13,7 +13,6 @@ const auth = async (req, res, next) => {
     req.token = token;
     next();
   } catch (e) {
-    console.log(e);
     res.sendStatus(401);
   }
 };

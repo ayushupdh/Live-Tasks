@@ -77,8 +77,8 @@ export const signupUser = (userInfo) => {
 export const signoutUser = () => {
   return async (dispatch, getState) => {
     try {
-      const response = await db.post("/users/logout", getToken(getState));
-      console.log(response);
+      const header = getToken(getState);
+      const response = await db.post("/users/logout", {}, header);
       dispatch({
         type: SIGN_OUT,
         payload: response.data.user,
@@ -94,7 +94,7 @@ export const signoutUser = () => {
   };
 };
 
-const getToken = (getState) => {
+export const getToken = (getState) => {
   const config = {
     headers: {
       "Content-type": "application/json",
