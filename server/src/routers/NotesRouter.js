@@ -1,13 +1,14 @@
 const express = require("express");
 const Notes = require("../modals/Notes");
 const router = new express.Router();
-
+const auth = require("../middleware/auth");
 /////////////////     Notes       //////////////////////////////////
 
 //Create a note
-router.post("/notes", async (req, res) => {
+router.post("/notes", auth, async (req, res) => {
+  console.log(req.body);
   try {
-    const notes = new Notes({ ...req.body, owner: "5ee7be58292f2f3540d8fa2e" });
+    const notes = new Notes({ ...req.body, owner: req.user._id });
     await notes.save();
     res.status(200).send(notes);
   } catch (error) {
@@ -25,14 +26,23 @@ router.get("/notes", async (req, res) => {
     res.sendStatus(400);
   }
 });
+//Get all the notes of a user
+router.get("/notes/me", auth, async (req, res) => {
+  try {
+    const notes = await Notes.find({ owner: req.user._id });
+    res.status(200).send(notes);
+  } catch (e) {
+    console.log("");
+    res.sendStatus(400);
+  }
+});
 
 //Get all the items in the notes
-router.get("/notes/:id", async (req, res) => {
+router.get("/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   try {
-    const notes = await Notes.findById(noteId);
+    const notes = await Notes.findOne({ _id: noteId, owner: req.user._id });
     // await notes.populate("owner").execPopulate(); //Get the owners info
-
     res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);
@@ -40,9 +50,9 @@ router.get("/notes/:id", async (req, res) => {
 });
 
 //Update Title
-router.patch("/notes/:id", async (req, res) => {
+router.patch("/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
-  const note = await Notes.findById(noteId);
+  const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
   try {
     if (!req.body.title) {
       res.sendStatus(400);
@@ -56,10 +66,13 @@ router.patch("/notes/:id", async (req, res) => {
 });
 
 //Delete the note
-router.delete("/notes/:id", async (req, res) => {
-  const id = req.params.id;
+router.delete("/notes/:id", auth, async (req, res) => {
+  const noteId = req.params.id;
   try {
-    const note = await Notes.findByIdAndDelete(id);
+    const note = await Notes.findOneAndDelete({
+      _id: noteId,
+      owner: req.user._id,
+    });
     if (note === null) {
       return res.sendStatus(404);
     }
@@ -73,10 +86,10 @@ router.delete("/notes/:id", async (req, res) => {
 /////////////////     Items in the note       //////////////////////////////////
 
 //Add an item to the notes
-router.post("/notes/:id", async (req, res) => {
-  const _id = req.params.id;
+router.post("/notes/:id", auth, async (req, res) => {
+  const noteId = req.params.id;
   try {
-    const notes = await Notes.findById(_id);
+    const notes = await Notes.findOne({ _id: noteId, owner: req.user._id });
 
     const prevlastItemIndex = notes.itemsCollections.length;
     notes.itemsCollections = notes.itemsCollections.concat(req.body);
@@ -90,12 +103,12 @@ router.post("/notes/:id", async (req, res) => {
 
 //Update an item from the notes
 
-router.patch("/notes/:notesId/:itemId", async (req, res) => {
+router.patch("/notes/:notesId/:itemId", auth, async (req, res) => {
   const notesId = req.params.notesId;
   const itemId = req.params.itemId;
   const updates = Object.keys(req.body);
   try {
-    const notes = await Notes.findById(notesId);
+    const notes = await Notes.findOne({ _id: notesId, owner: req.user._id });
 
     //Throw 404 if supplied notes does not exists
     if (!notes) {
@@ -124,11 +137,11 @@ router.patch("/notes/:notesId/:itemId", async (req, res) => {
 });
 
 //Delete a note from the notes
-router.delete("/notes/:notesId/:itemId", async (req, res) => {
+router.delete("/notes/:notesId/:itemId", auth, async (req, res) => {
   const notesId = req.params.notesId;
   const itemId = req.params.itemId;
   try {
-    const notes = await Notes.findById(notesId);
+    const notes = await Notes.findOne({ _id: notesId, owner: req.user._id });
 
     //check if the notes exists
     if (!notes) {
