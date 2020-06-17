@@ -1,0 +1,41 @@
+.profile-circle {
+  width: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.item:hover {
+  filter: brightness(1.2);
+}
+
+.icon {
+  width: 200%;
+  height: 200%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 70px;
+  width: 200px;
+  transform: translateX(-45%);
+  background-color: #111;
+  border: 1px solid #999;
+  border-radius: 5%;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.menu-item {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border-radius: 5%;
+  transition: background 200ms;
+
+  padding: 1.5rem;
+  /* margin-left: 2rem; */
+}
+.menu-item:hover {
+  background-color: #222;
+  text-decoration: none;
+  cursor: default;
+}

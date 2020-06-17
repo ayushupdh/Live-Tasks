@@ -6,7 +6,6 @@ const auth = require("../middleware/auth");
 
 //Create a note
 router.post("/notes", auth, async (req, res) => {
-  console.log(req.body);
   try {
     const notes = new Notes({ ...req.body, owner: req.user._id });
     await notes.save();
@@ -32,7 +31,6 @@ router.get("/notes/me", auth, async (req, res) => {
     const notes = await Notes.find({ owner: req.user._id });
     res.status(200).send(notes);
   } catch (e) {
-    console.log("");
     res.sendStatus(400);
   }
 });

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Header from "./Header";
+import Header from "./Header/Header";
 import { connect } from "react-redux";
 import { addNote, getNotes, removeNote } from "../actions/notesActions";
 import { Link } from "react-router-dom";
@@ -34,6 +34,7 @@ class NotesList extends Component {
               type="button"
               className="close"
               aria-label="Close"
+              style={{ outline: "none" }}
             >
               <span aria-hidden="true">&times;</span>
             </button>

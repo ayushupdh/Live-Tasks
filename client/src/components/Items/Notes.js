@@ -76,6 +76,7 @@ class Notes extends Component {
                 type="button"
                 className="close"
                 aria-label="Close"
+                style={{ outline: "none" }}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
