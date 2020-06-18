@@ -3,6 +3,7 @@ import Header from "./Header/Header";
 import { connect } from "react-redux";
 import { addNote, getNotes, removeNote } from "../actions/notesActions";
 import { Link } from "react-router-dom";
+
 class NotesList extends Component {
   componentDidMount() {
     this.props.getNotes();
@@ -25,9 +26,10 @@ class NotesList extends Component {
           className="mb-2 shadow-sm border clearfix p-3 rounded"
           key={note._id}
         >
-          <Link to={`/notes/${note._id}`} className="float-left h5 text-body">
+          <Link to={`/notes/${note._id}`} className=" float-left h5 text-body">
             {note.title}
           </Link>
+
           <div className="float-right">
             <button
               onClick={() => this.removeNoteHelper(note._id)}

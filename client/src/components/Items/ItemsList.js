@@ -6,12 +6,19 @@ class ItemsList extends Component {
   onClickRemove = (id) => {
     this.props.removeItem(this.props.noteId, id);
   };
+
   onClickEdit = (itemId, item) => {
     this.props.editItem(this.props.noteId, itemId, item);
   };
+  onCheck = (id, completed) => {
+    const completedChange = !completed ? true : false;
+    this.props.editItem(this.props.noteId, id, { completed: completedChange });
+  };
+
   componentDidMount() {
     this.props.getItems(this.props.noteId);
   }
+
   generateItem = () => {
     if (this.props.listItemArray.length === 0) {
       return <div>Add an Item to the List</div>;
@@ -25,7 +32,11 @@ class ItemsList extends Component {
           <input
             className="form-check-input ml-1"
             type="checkbox"
-            aria-label="Checkbox "
+            checked={itemObject.completed}
+            aria-label="Checkbox"
+            onChange={() => {
+              this.onCheck(itemObject._id, itemObject.completed);
+            }}
           />
           <div>
             <button
@@ -39,14 +50,21 @@ class ItemsList extends Component {
           </div>
 
           <div
-            style={{
-              outline: "0px solid transparent",
-            }}
+            style={
+              itemObject.completed
+                ? {
+                    textDecoration: "line-through",
+                    outline: "0px solid transparent",
+                  }
+                : { outline: "0px solid transparent" }
+            }
             suppressContentEditableWarning={true}
             className="ml-4"
             contentEditable={true}
             onBlur={(e) =>
-              this.onClickEdit(itemObject._id, e.currentTarget.textContent)
+              this.onClickEdit(itemObject._id, {
+                item: e.currentTarget.textContent,
+              })
             }
           >
             {itemObject.item}

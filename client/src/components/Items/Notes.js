@@ -57,19 +57,21 @@ class Notes extends Component {
         >
           <div className="p-2">
             <div className="clearfix">
-              <div
-                style={{
-                  outline: 0,
-                }}
-                onFocus={this.focusHelper}
-                ref={this.divRef}
-                suppressContentEditableWarning={true}
-                className="h4 mb-4 float-left"
-                contentEditable={true}
-                onBlur={(e) => this.onEditHandler(e.target.innerHTML)}
-                placeholder="Title"
-              >
-                {this.titleHelper()}
+              <div>
+                <div
+                  style={{
+                    outline: 0,
+                  }}
+                  onFocus={this.focusHelper}
+                  ref={this.divRef}
+                  suppressContentEditableWarning={true}
+                  className="h4 mb-4 float-left"
+                  contentEditable={true}
+                  onBlur={(e) => this.onEditHandler(e.target.innerHTML)}
+                  placeholder="Title"
+                >
+                  {this.titleHelper()}
+                </div>
               </div>
               <button
                 onClick={() => history.push("/notes")}

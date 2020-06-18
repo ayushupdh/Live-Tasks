@@ -10,10 +10,11 @@ import {
   EDIT_ITEM,
   REMOVE_ITEM,
 } from "./types";
+
 ///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch, getState) => {
-    const response = await db.get("/notes/me", getToken(getState));
+    const response = await db.get("/notes/me", getAuthHeader(getState));
     dispatch({
       type: GET_NOTES,
       payload: response.data,
@@ -23,7 +24,7 @@ export const getNotes = () => {
 
 export const addNote = () => {
   return async (dispatch, getState) => {
-    const response = await db.post("/notes", {}, getToken(getState));
+    const response = await db.post("/notes", {}, getAuthHeader(getState));
     console.log(response);
     dispatch({
       type: ADD_NOTE,
@@ -37,7 +38,7 @@ export const editTitle = (noteId, title) => {
     const response = await db.patch(
       `/notes/${noteId}`,
       { title },
-      getToken(getState)
+      getAuthHeader(getState)
     );
     dispatch({
       type: EDIT_TITLE,
@@ -49,7 +50,7 @@ export const editTitle = (noteId, title) => {
 
 export const removeNote = (noteId) => {
   return async (dispatch, getState) => {
-    await db.delete(`/notes/${noteId}`, getToken(getState));
+    await db.delete(`/notes/${noteId}`, getAuthHeader(getState));
     dispatch({
       type: REMOVE_NOTES,
       payload: noteId,
@@ -60,7 +61,7 @@ export const removeNote = (noteId) => {
 /////////////////// Items  ////////////////
 export const getItems = (noteId) => {
   return async (dispatch, getState) => {
-    const response = await db.get(`/notes/${noteId}`, getToken(getState));
+    const response = await db.get(`/notes/${noteId}`, getAuthHeader(getState));
     dispatch({
       type: GET_ITEMS,
       payload: response.data.itemsCollections,
@@ -74,7 +75,7 @@ export const addItem = (noteId, item) => {
     const response = await db.post(
       `/notes/${noteId}`,
       noteItem,
-      getToken(getState)
+      getAuthHeader(getState)
     );
     dispatch({
       type: ADD_ITEM,
@@ -84,12 +85,11 @@ export const addItem = (noteId, item) => {
 };
 
 export const editItem = (noteId, itemId, item) => {
-  const noteItem = { item: item };
   return async (dispatch, getState) => {
     const response = await db.patch(
       `/notes/${noteId}/${itemId}`,
-      noteItem,
-      getToken(getState)
+      item,
+      getAuthHeader(getState)
     );
 
     dispatch({
@@ -101,7 +101,7 @@ export const editItem = (noteId, itemId, item) => {
 
 export const removeItem = (noteId, itemId) => {
   return async (dispatch, getState) => {
-    await db.delete(`/notes/${noteId}/${itemId}`, getToken(getState));
+    await db.delete(`/notes/${noteId}/${itemId}`, getAuthHeader(getState));
     dispatch({
       type: REMOVE_ITEM,
       payload: itemId,
@@ -109,12 +109,13 @@ export const removeItem = (noteId, itemId) => {
   };
 };
 
-export const getToken = (getState) => {
+export const getAuthHeader = (getState) => {
   const config = {
     headers: {
       "Content-type": "application/json",
     },
   };
+
   const token = getState().user.userToken;
 
   if (token) {

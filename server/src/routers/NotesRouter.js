@@ -100,7 +100,6 @@ router.post("/notes/:id", auth, async (req, res) => {
 });
 
 //Update an item from the notes
-
 router.patch("/notes/:notesId/:itemId", auth, async (req, res) => {
   const notesId = req.params.notesId;
   const itemId = req.params.itemId;
