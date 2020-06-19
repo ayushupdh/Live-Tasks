@@ -28,15 +28,6 @@ router.get("/notes", async (req, res) => {
 //Get all the notes of a user
 router.get("/notes/me", auth, async (req, res) => {
   try {
-    // const notes = await Notes.find({
-    //   // $or: [
-    //   //   {
-    //   //     owner: req.user._id,
-    //   //   },
-    //   sharedTo: [{ user: req.user._id }],
-    //   // ],
-    // });
-
     const notes = await Notes.find({
       $or: [{ owner: req.user._id }, { "sharedTo.user": req.user._id }],
     });
@@ -79,7 +70,6 @@ router.patch("/notes/share/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   const updates = req.body;
   const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
-
   try {
     if (updates.sharable === "true") {
       note["sharable"] = updates.sharable;
@@ -147,7 +137,15 @@ router.delete("/notes/:id", auth, async (req, res) => {
 router.post("/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   try {
-    const notes = await Notes.findOne({ _id: noteId, owner: req.user._id });
+    const notes = await Notes.findOne({
+      $and: [
+        { _id: noteId },
+        {
+          $or: [{ owner: req.user._id }, { "sharedTo.user": req.user._id }],
+        },
+      ],
+    });
+    console.log(notes);
     const prevlastItemIndex = notes.itemsCollections.length;
     notes.itemsCollections = notes.itemsCollections.concat({
       ...req.body,
