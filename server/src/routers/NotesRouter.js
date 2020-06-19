@@ -2,6 +2,11 @@ const express = require("express");
 const Notes = require("../modals/Notes");
 const router = new express.Router();
 const auth = require("../middleware/auth");
+const User = require("../modals/User");
+const sharableFindQuery = (req) => {
+  return [{ owner: req.user._id }, { "sharedTo.user": req.user._id }];
+};
+
 /////////////////     Notes       //////////////////////////////////
 
 //Create a note
@@ -28,9 +33,7 @@ router.get("/notes", async (req, res) => {
 //Get all the notes of a user
 router.get("/notes/me", auth, async (req, res) => {
   try {
-    const notes = await Notes.find({
-      $or: [{ owner: req.user._id }, { "sharedTo.user": req.user._id }],
-    });
+    const notes = await Notes.find({ $or: sharableFindQuery(req) });
     res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);
@@ -41,7 +44,14 @@ router.get("/notes/me", auth, async (req, res) => {
 router.get("/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   try {
-    const notes = await Notes.findOne({ _id: noteId, owner: req.user._id });
+    const notes = await Notes.findOne({
+      $and: [
+        { _id: noteId },
+        {
+          $or: sharableFindQuery(req),
+        },
+      ],
+    });
     // await notes.populate("owner").execPopulate(); //Get the owners info
     res.status(200).send(notes);
   } catch (e) {
@@ -52,7 +62,14 @@ router.get("/notes/:id", auth, async (req, res) => {
 //Update Title
 router.patch("/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
-  const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
+  const note = await Notes.findOne({
+    $and: [
+      { _id: noteId },
+      {
+        $or: sharableFindQuery(req),
+      },
+    ],
+  });
   try {
     if (!req.body.title) {
       res.sendStatus(400);
@@ -61,21 +78,47 @@ router.patch("/notes/:id", auth, async (req, res) => {
     await note.save();
     res.status(200).send(note);
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
   }
 });
+
+//Delete the note
+router.delete("/notes/:id", auth, async (req, res) => {
+  const noteId = req.params.id;
+  try {
+    const note = await Notes.findOneAndDelete({
+      _id: noteId,
+      owner: req.user._id,
+    });
+    if (note === null) {
+      return res.sendStatus(404);
+    }
+    res.status(200).send({});
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+/////////// USER SHARE   //////////////////
 
 //Update Sharable Status
 router.patch("/notes/share/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   const updates = req.body;
   const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
+  const userObj = await User.findOne({ email: updates.userEmail });
+  if (!userObj) {
+    return res.status(404).send({ error: "No user with that email" });
+  }
+
   try {
     if (updates.sharable === "true") {
       note["sharable"] = updates.sharable;
 
-      note.sharedTo = updates.user
-        ? note.sharedTo.concat({ user: updates.user })
+      note.sharedTo = updates.userEmail
+        ? note.sharedTo.concat({ user: userObj._id })
         : note.sharedTo;
     } else if (updates.sharable === "false") {
       note["sharable"] = "false";
@@ -113,25 +156,40 @@ router.delete("/notes/share/:id", auth, async (req, res) => {
   }
 });
 
-//Delete the note
-router.delete("/notes/:id", auth, async (req, res) => {
-  const noteId = req.params.id;
+/////////////////     Items in the note       //////////////////////////////////
+
+//Get an item
+router.get("/notes/:noteId/:itemId", auth, async (req, res) => {
+  const noteId = req.params.noteId;
+  const itemId = req.params.itemId;
   try {
-    const note = await Notes.findOneAndDelete({
-      _id: noteId,
-      owner: req.user._id,
+    const notes = await Notes.findOne({
+      $and: [
+        { _id: noteId },
+        {
+          $or: sharableFindQuery(req),
+        },
+      ],
     });
-    if (note === null) {
+
+    //Throw 404 if supplied notes does not exists
+    if (!notes) {
       return res.sendStatus(404);
     }
-    res.status(200).send({});
-  } catch (e) {
-    console.log(e);
+
+    const itemIndex = notes.itemsCollections.findIndex(
+      (item) => item._id.toString() === itemId
+    );
+
+    const requiredNote = notes.itemsCollections.filter((item) => {
+      return item._id.toString() === itemId;
+    });
+
+    res.status(200).send(requiredNote[0]);
+  } catch (error) {
     res.sendStatus(500);
   }
 });
-
-/////////////////     Items in the note       //////////////////////////////////
 
 //Add an item to the notes
 router.post("/notes/:id", auth, async (req, res) => {
@@ -141,11 +199,10 @@ router.post("/notes/:id", auth, async (req, res) => {
       $and: [
         { _id: noteId },
         {
-          $or: [{ owner: req.user._id }, { "sharedTo.user": req.user._id }],
+          $or: sharableFindQuery(req),
         },
       ],
     });
-    console.log(notes);
     const prevlastItemIndex = notes.itemsCollections.length;
     notes.itemsCollections = notes.itemsCollections.concat({
       ...req.body,
@@ -160,12 +217,19 @@ router.post("/notes/:id", auth, async (req, res) => {
 });
 
 //Update an item from the notes
-router.patch("/notes/:notesId/:itemId", auth, async (req, res) => {
-  const notesId = req.params.notesId;
+router.patch("/notes/:noteId/:itemId", auth, async (req, res) => {
+  const noteId = req.params.noteId;
   const itemId = req.params.itemId;
   const updates = Object.keys(req.body);
   try {
-    const notes = await Notes.findOne({ _id: notesId, owner: req.user._id });
+    const notes = await Notes.findOne({
+      $and: [
+        { _id: noteId },
+        {
+          $or: sharableFindQuery(req),
+        },
+      ],
+    });
 
     //Throw 404 if supplied notes does not exists
     if (!notes) {
@@ -194,12 +258,18 @@ router.patch("/notes/:notesId/:itemId", auth, async (req, res) => {
 });
 
 //Delete a note from the notes
-router.delete("/notes/:notesId/:itemId", auth, async (req, res) => {
-  const notesId = req.params.notesId;
+router.delete("/notes/:noteId/:itemId", auth, async (req, res) => {
+  const noteId = req.params.noteId;
   const itemId = req.params.itemId;
   try {
-    const notes = await Notes.findOne({ _id: notesId, owner: req.user._id });
-
+    const notes = await Notes.findOne({
+      $and: [
+        { _id: noteId },
+        {
+          $or: sharableFindQuery(req),
+        },
+      ],
+    });
     //check if the notes exists
     if (!notes) {
       res.sendStatus(404);

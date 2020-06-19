@@ -1,5 +1,6 @@
 import db from "../apis/db";
 import history from "../history";
+import socket from "./socketHandler";
 import {
   GET_NOTES,
   ADD_NOTE,
@@ -33,6 +34,7 @@ export const addNote = () => {
     history.push(`/notes/${response.data._id}`);
   };
 };
+
 export const editTitle = (noteId, title) => {
   return async (dispatch, getState) => {
     const response = await db.patch(
@@ -40,6 +42,13 @@ export const editTitle = (noteId, title) => {
       { title },
       getAuthHeader(getState)
     );
+    console.log("work");
+    socket.emit("editTitle", { noteId, title }, (error) => {
+      if (error) {
+        alert(error);
+      }
+    });
+
     dispatch({
       type: EDIT_TITLE,
       payload: response.data,
