@@ -28,8 +28,17 @@ router.get("/notes", async (req, res) => {
 //Get all the notes of a user
 router.get("/notes/me", auth, async (req, res) => {
   try {
+    // const notes = await Notes.find({
+    //   // $or: [
+    //   //   {
+    //   //     owner: req.user._id,
+    //   //   },
+    //   sharedTo: [{ user: req.user._id }],
+    //   // ],
+    // });
+
     const notes = await Notes.find({
-      owner: req.user._id,
+      $or: [{ owner: req.user._id }, { "sharedTo.user": req.user._id }],
     });
     res.status(200).send(notes);
   } catch (e) {
