@@ -28,7 +28,9 @@ router.get("/notes", async (req, res) => {
 //Get all the notes of a user
 router.get("/notes/me", auth, async (req, res) => {
   try {
-    const notes = await Notes.find({ owner: req.user._id });
+    const notes = await Notes.find({
+      owner: req.user._id,
+    });
     res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);
@@ -63,6 +65,55 @@ router.patch("/notes/:id", auth, async (req, res) => {
   }
 });
 
+//Update Sharable Status
+router.patch("/notes/share/:id", auth, async (req, res) => {
+  const noteId = req.params.id;
+  const updates = req.body;
+  const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
+
+  try {
+    if (updates.sharable === "true") {
+      note["sharable"] = updates.sharable;
+
+      note.sharedTo = updates.user
+        ? note.sharedTo.concat({ user: updates.user })
+        : note.sharedTo;
+    } else if (updates.sharable === "false") {
+      note["sharable"] = "false";
+      note.sharedTo = [];
+    }
+    await note.save();
+
+    res.status(200).send(note);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+//Delete Sharable User
+router.delete("/notes/share/:id", auth, async (req, res) => {
+  const noteId = req.params.id;
+  const userId = req.body.user;
+
+  const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
+  try {
+    if (!note) {
+      return res.sendStatus(404);
+    }
+    note.sharedTo = note.sharedTo.filter((userObj) => {
+      return userObj.user.toString() !== userId;
+    });
+
+    await note.save();
+
+    res.status(200).send(note.sharedTo);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 //Delete the note
 router.delete("/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
@@ -88,9 +139,11 @@ router.post("/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   try {
     const notes = await Notes.findOne({ _id: noteId, owner: req.user._id });
-
     const prevlastItemIndex = notes.itemsCollections.length;
-    notes.itemsCollections = notes.itemsCollections.concat(req.body);
+    notes.itemsCollections = notes.itemsCollections.concat({
+      ...req.body,
+      lastEditedBy: req.user._id,
+    });
     await notes.save();
     res.status(200).send(notes.itemsCollections[prevlastItemIndex]);
   } catch (e) {
