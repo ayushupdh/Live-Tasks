@@ -1,6 +1,8 @@
 import db from "../apis/db";
 import history from "../history";
 import socket from "./socketHandler";
+import { store } from "../store";
+
 import {
   GET_NOTES,
   ADD_NOTE,
@@ -16,16 +18,27 @@ import {
 
 ////SOCKETIO//////
 
+socket.on("sharedNote", (data) => {
+  console.log("Shared note");
+  store.dispatch(getNotes());
+
+  socket.emit("joinNote", { noteId: data, user: "id" });
+});
+socket.on("message", (data) => {
+  console.log(data);
+});
 ///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch, getState) => {
+    console.log("called");
     const response = await db.get("/notes/me", getAuthHeader(getState));
     dispatch({
       type: GET_NOTES,
       payload: response.data,
     });
-
-    if (getState().user) {
+    console.log(getState().user);
+    if (getState().user.user !== null) {
+      console.log(getState().user);
       socket.emit("userIdentify", { user: getState().user.user });
     }
   };
@@ -93,12 +106,7 @@ export const shareNotes = (noteId, userEmail) => {
         payload: response.data,
       });
 
-      // socket.emit("sharedNote", { username, noteId }, (error) => {
-      //   if (error) {
-      //     alert(error);
-      //     location.href = "/";
-      //   }
-      // });
+      socket.emit("shareNotes", { noteId, userEmail });
     } catch (error) {
       if (error.response.status === 404)
         dispatch({

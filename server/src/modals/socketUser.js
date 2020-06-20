@@ -8,6 +8,10 @@ const socketUserSchema = new mongoose.Schema({
         socketId:{
           type:"String",
           required:true
+        },
+        userEmail:{
+          type:String,
+          required:true
         }
 
 },
