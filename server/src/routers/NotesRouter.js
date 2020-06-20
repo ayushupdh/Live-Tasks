@@ -126,7 +126,7 @@ router.patch("/notes/share/:id", auth, async (req, res) => {
     }
     await note.save();
 
-    res.status(200).send(note);
+    res.status(200).send(note.sharedTo);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

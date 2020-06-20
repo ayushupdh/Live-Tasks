@@ -10,6 +10,8 @@ import {
   ADD_ITEM,
   EDIT_ITEM,
   REMOVE_ITEM,
+  SHARE_NOTES,
+  SHARE_FAILED,
 } from "./types";
 
 ///////////////    Notes ////////////////
@@ -64,6 +66,29 @@ export const removeNote = (noteId) => {
       type: REMOVE_NOTES,
       payload: noteId,
     });
+  };
+};
+export const shareNotes = (noteId, userEmail) => {
+  return async (dispatch, getState) => {
+    const body = {
+      sharable: "true",
+      userEmail,
+    };
+    try {
+      const response = await db.patch(
+        `/notes/share/${noteId}`,
+        body,
+        getAuthHeader(getState)
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error.response);
+      if (error.response.status === 404)
+        dispatch({
+          type: SHARE_FAILED,
+          payload: error.response.data.error,
+        });
+    }
   };
 };
 

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { addNote, getNotes, removeNote } from "../actions/notesActions";
 import { Link } from "react-router-dom";
 import ShareNote from "./ShareNote";
-import { ReactComponent as Close } from "../icon/menu.svg";
+import { ReactComponent as Options } from "../icon/menu.svg";
 
 import "./NoteList.css";
 class NotesList extends Component {
@@ -50,12 +50,13 @@ class NotesList extends Component {
           key={note._id}
         >
           <div className="row">
+            {/* Note title */}
             <div className="col-9">
               <Link to={`/notes/${note._id}`} className=" h5 text-body  ">
                 {note.title}
               </Link>
             </div>
-
+            {/* Note Options */}
             <div className="col-3 ">
               <div
                 className="menu-icon float-right"
@@ -66,7 +67,7 @@ class NotesList extends Component {
                   });
                 }}
               >
-                <Close />
+                <Options />
               </div>
 
               {this.state.open &&
@@ -94,7 +95,7 @@ class NotesList extends Component {
           </div>
           <div className=" ">{this.renderNotesList()}</div>
         </div>
-        <ShareNote open={this.state.modalOpen} />
+        <ShareNote open={this.state.modalOpen} noteId={this.state.id} />
       </div>
     );
   }
