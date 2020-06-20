@@ -4,7 +4,7 @@ const notesSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      default: "Title",
+      default: "Note",
       trim: true,
     },
     itemsCollections: [

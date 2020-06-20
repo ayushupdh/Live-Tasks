@@ -13,6 +13,7 @@ import history from "../history";
 export const loadUser = () => async (dispatch, getState) => {
   try {
     const response = await db.get("/users/me", getToken(getState));
+
     dispatch({
       type: LOAD_USER,
       payload: response.data,

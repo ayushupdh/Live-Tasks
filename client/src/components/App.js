@@ -10,7 +10,7 @@ import "./App.css";
 import { loadUser } from "../actions/userActions";
 class App extends Component {
   componentDidMount() {
-    store.dispatch(loadUser);
+    store.dispatch(loadUser());
   }
   render() {
     return (

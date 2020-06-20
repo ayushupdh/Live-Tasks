@@ -1,0 +1,10 @@
+.share-container {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 2%;
+  border: 1px solid red;
+  background-color: white;
+  padding: 1.5rem;
+}

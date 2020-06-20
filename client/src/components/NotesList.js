@@ -3,8 +3,12 @@ import Header from "./Header/Header";
 import { connect } from "react-redux";
 import { addNote, getNotes, removeNote } from "../actions/notesActions";
 import { Link } from "react-router-dom";
+import ShareNote from "./ShareNote";
+import { ReactComponent as Close } from "../icon/menu.svg";
 
+import "./NoteList.css";
 class NotesList extends Component {
+  state = { open: false, id: null, modalOpen: false };
   componentDidMount() {
     this.props.getNotes();
   }
@@ -16,6 +20,25 @@ class NotesList extends Component {
     return this.props.removeNote(id);
   };
 
+  renderMenu() {
+    return (
+      <div className="menu-dropdown">
+        <div
+          className="menu-dropdown-item"
+          onClick={() => this.setState({ modalOpen: true })}
+        >
+          Share
+        </div>
+        <div
+          className="menu-dropdown-item"
+          onClick={() => this.removeNoteHelper(this.state.id)}
+        >
+          Delete
+        </div>
+      </div>
+    );
+  }
+
   renderNotesList = () => {
     if (this.props.noteList.length === 0) {
       return <div>Press Create Notes to start creating notes</div>;
@@ -23,23 +46,33 @@ class NotesList extends Component {
     return this.props.noteList.map((note) => {
       return (
         <div
-          className="mb-2 shadow-sm border clearfix p-3 rounded"
+          className="mb-2 shadow-sm border container p-3 rounded"
           key={note._id}
         >
-          <Link to={`/notes/${note._id}`} className=" float-left h5 text-body">
-            {note.title}
-          </Link>
+          <div className="row">
+            <div className="col-9">
+              <Link to={`/notes/${note._id}`} className=" h5 text-body  ">
+                {note.title}
+              </Link>
+            </div>
 
-          <div className="float-right">
-            <button
-              onClick={() => this.removeNoteHelper(note._id)}
-              type="button"
-              className="close"
-              aria-label="Close"
-              style={{ outline: "none" }}
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <div className="col-3 ">
+              <div
+                className="menu-icon float-right"
+                onClick={() => {
+                  return this.setState({
+                    open: !this.state.open,
+                    id: note._id,
+                  });
+                }}
+              >
+                <Close />
+              </div>
+
+              {this.state.open &&
+                this.state.id === note._id &&
+                this.renderMenu()}
+            </div>
           </div>
         </div>
       );
@@ -59,9 +92,9 @@ class NotesList extends Component {
               Create Notes
             </button>
           </div>
-
           <div className=" ">{this.renderNotesList()}</div>
         </div>
+        <ShareNote open={this.state.modalOpen} />
       </div>
     );
   }
