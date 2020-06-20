@@ -3,12 +3,12 @@ import Header from "./Header/Header";
 import { connect } from "react-redux";
 import { addNote, getNotes, removeNote } from "../actions/notesActions";
 import { Link } from "react-router-dom";
-import ShareNote from "./ShareNote";
+import ShareNote from "./OptionModal";
 import { ReactComponent as Options } from "../icon/menu.svg";
 
 import "./NoteList.css";
 class NotesList extends Component {
-  state = { open: false, id: null, modalOpen: false };
+  state = { menuOpen: false, id: null, modalOpen: false };
   componentDidMount() {
     this.props.getNotes();
   }
@@ -16,10 +16,28 @@ class NotesList extends Component {
   createNoteHelper = () => {
     this.props.addNote();
   };
+
   removeNoteHelper = (id) => {
     return this.props.removeNote(id);
   };
 
+  handleModal = () => {
+    if (this.state.modalOpen) {
+      return (
+        <div>
+          <ShareNote
+            content={"Enter the email of the user you want to share with:"}
+            noteId={this.state.id}
+            toggleModalOpen={this.toggleModalOpen}
+          />
+        </div>
+      );
+    }
+  };
+
+  toggleModalOpen = () => {
+    this.setState({ modalOpen: false });
+  };
   renderMenu() {
     return (
       <div className="menu-dropdown">
@@ -62,7 +80,7 @@ class NotesList extends Component {
                 className="menu-icon float-right"
                 onClick={() => {
                   return this.setState({
-                    open: !this.state.open,
+                    menuOpen: !this.state.menuOpen,
                     id: note._id,
                   });
                 }}
@@ -70,7 +88,7 @@ class NotesList extends Component {
                 <Options />
               </div>
 
-              {this.state.open &&
+              {this.state.menuOpen &&
                 this.state.id === note._id &&
                 this.renderMenu()}
             </div>
@@ -95,7 +113,7 @@ class NotesList extends Component {
           </div>
           <div className=" ">{this.renderNotesList()}</div>
         </div>
-        <ShareNote open={this.state.modalOpen} noteId={this.state.id} />
+        {this.handleModal()}
       </div>
     );
   }

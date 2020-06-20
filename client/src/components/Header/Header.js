@@ -11,7 +11,10 @@ class Header extends Component {
         <h1 className="float-left ml-3"> Live Tasks</h1>
         <div className="float-right mr-4 mt-2 ">
           <ProfileDropDown>
-            <DropDownMenu signoutUser={this.props.signoutUser} />
+            <DropDownMenu
+              signoutUser={this.props.signoutUser}
+              user={this.props.user}
+            />
           </ProfileDropDown>
         </div>
       </div>
@@ -19,4 +22,8 @@ class Header extends Component {
   }
 }
 
-export default connect(null, { signoutUser })(Header);
+const mapStateToProps = (state) => {
+  return { user: state.user.user };
+};
+
+export default connect(mapStateToProps, { signoutUser })(Header);

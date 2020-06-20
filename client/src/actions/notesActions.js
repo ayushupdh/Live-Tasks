@@ -14,6 +14,8 @@ import {
   SHARE_FAILED,
 } from "./types";
 
+////SOCKETIO//////
+
 ///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch, getState) => {
@@ -22,13 +24,17 @@ export const getNotes = () => {
       type: GET_NOTES,
       payload: response.data,
     });
+
+    if (getState().user) {
+      socket.emit("userIdentify", { user: getState().user.user });
+    }
   };
 };
 
 export const addNote = () => {
   return async (dispatch, getState) => {
     const response = await db.post("/notes", {}, getAuthHeader(getState));
-    console.log(response);
+
     dispatch({
       type: ADD_NOTE,
       payload: response.data,
@@ -44,7 +50,7 @@ export const editTitle = (noteId, title) => {
       { title },
       getAuthHeader(getState)
     );
-    console.log("work");
+
     socket.emit("editTitle", { noteId, title }, (error) => {
       if (error) {
         alert(error);
@@ -80,9 +86,20 @@ export const shareNotes = (noteId, userEmail) => {
         body,
         getAuthHeader(getState)
       );
-      console.log(response);
+
+      //TODO: Work on updating the notes later
+      dispatch({
+        type: SHARE_NOTES,
+        payload: response.data,
+      });
+
+      // socket.emit("sharedNote", { username, noteId }, (error) => {
+      //   if (error) {
+      //     alert(error);
+      //     location.href = "/";
+      //   }
+      // });
     } catch (error) {
-      console.log(error.response);
       if (error.response.status === 404)
         dispatch({
           type: SHARE_FAILED,

@@ -3,6 +3,7 @@ import {
   ADD_NOTE,
   EDIT_TITLE,
   REMOVE_NOTES,
+  SHARE_NOTES,
 } from "../actions/types";
 export default (notes = [], action) => {
   switch (action.type) {
@@ -16,6 +17,9 @@ export default (notes = [], action) => {
       return [...notes, action.payload];
     case REMOVE_NOTES:
       return notes.filter((note) => note._id !== action.payload);
+    //TODO: Work on updating the notes later
+    case SHARE_NOTES:
+      return notes;
     default:
       return notes;
   }
