@@ -1,4 +1,9 @@
-import { SIGNIN_FAILED, SIGNUP_FAILED, SHARE_FAILED } from "../actions/types";
+import {
+  SIGNIN_FAILED,
+  SIGNUP_FAILED,
+  SHARE_FAILED,
+  NO_ERROR,
+} from "../actions/types";
 
 const initialState = null;
 
@@ -10,6 +15,8 @@ export default (error = initialState, action) => {
       return (error = action.payload);
     case SHARE_FAILED:
       return (error = action.payload);
+    case NO_ERROR:
+      return (error = null);
     default:
       return error;
   }

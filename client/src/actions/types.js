@@ -6,6 +6,7 @@ export const SIGN_OUT = "SIGN_OUT";
 export const SIGNIN_FAILED = "SIGNIN_FAILED";
 export const SIGNUP_FAILED = "SIGNUP_FAILED";
 export const SHARE_FAILED = "SHARE_FAILED";
+export const NO_ERROR = "NO_ERROR";
 
 export const GET_NOTES = "GET_NOTES";
 export const ADD_NOTE = "ADD_NOTE";

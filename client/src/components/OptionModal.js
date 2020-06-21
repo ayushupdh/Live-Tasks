@@ -6,11 +6,17 @@ import "./OptionModal.css";
 
 class OptionModal extends React.Component {
   state = { input: "" };
+
   callSubmit(e) {
     e.preventDefault();
 
     if (this.state.input) {
       this.props.shareNotes(this.props.noteId, this.state.input);
+      setTimeout(() => {
+        if (this.props.error === null) {
+          this.props.toggleModalOpen();
+        }
+      }, 100);
     }
   }
 

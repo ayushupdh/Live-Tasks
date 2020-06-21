@@ -14,6 +14,7 @@ import {
   REMOVE_ITEM,
   SHARE_NOTES,
   SHARE_FAILED,
+  NO_ERROR,
 } from "./types";
 
 ////SOCKETIO//////
@@ -104,6 +105,9 @@ export const shareNotes = (noteId, userEmail) => {
       dispatch({
         type: SHARE_NOTES,
         payload: response.data,
+      });
+      dispatch({
+        type: NO_ERROR,
       });
 
       socket.emit("shareNotes", { noteId, userEmail });
