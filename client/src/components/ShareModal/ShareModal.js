@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
-import { shareNotes } from "../actions/notesActions";
-import "./OptionModal.css";
+import { shareNotes } from "../../actions/notesActions";
+import "./ShareModal.css";
 
 class OptionModal extends React.Component {
   state = { input: "" };
