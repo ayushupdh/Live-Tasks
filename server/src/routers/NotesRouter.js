@@ -107,14 +107,14 @@ router.delete("/notes/:id", auth, async (req, res) => {
 router.patch("/notes/share/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   const updates = req.body;
+
   const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
   const userObj = await User.findOne({ email: updates.userEmail });
-  if (!userObj) {
-    return res.status(404).send({ error: "No user with that email" });
-  }
-
   try {
     if (updates.sharable === "true") {
+      if (!userObj) {
+        return res.status(404).send({ error: "No user with that email" });
+      }
       note["sharable"] = updates.sharable;
 
       note.sharedTo = updates.userEmail
@@ -128,7 +128,7 @@ router.patch("/notes/share/:id", auth, async (req, res) => {
 
     res.status(200).send(note.sharedTo);
   } catch (error) {
-    console.log(error);
+    console.trace(error);
     res.sendStatus(500);
   }
 });

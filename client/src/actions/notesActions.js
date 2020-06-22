@@ -23,24 +23,33 @@ socket.on("sharedNote", (data) => {
   console.log("Shared note");
   store.dispatch(getNotes());
 
-  socket.emit("joinNote", { noteId: data, user: "id" });
+  socket.emit("joinNote", { noteId: data, user: "id" }, (sent) => {
+    console.log("asca");
+    console.log(sent);
+  });
 });
 socket.on("message", (data) => {
   console.log(data);
 });
+
+socket.on("removedNote", () => {
+  console.log("removed");
+  store.dispatch(getNotes());
+});
 ///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch, getState) => {
-    console.log("called");
     const response = await db.get("/notes/me", getAuthHeader(getState));
     dispatch({
       type: GET_NOTES,
       payload: response.data,
     });
-    console.log(getState().user);
     if (getState().user.user !== null) {
-      console.log(getState().user);
-      socket.emit("userIdentify", { user: getState().user.user });
+      socket.emit("userIdentify", { user: getState().user.user }, (message) => {
+        console.log(message);
+      });
+    } else {
+      store.dispatch(getNotes());
     }
   };
 };
@@ -86,6 +95,10 @@ export const removeNote = (noteId) => {
       type: REMOVE_NOTES,
       payload: noteId,
     });
+
+    socket.emit("removeNote", noteId, (message) => {
+      console.log(message);
+    });
   };
 };
 export const shareNotes = (noteId, userEmail) => {
@@ -110,7 +123,9 @@ export const shareNotes = (noteId, userEmail) => {
         type: NO_ERROR,
       });
 
-      socket.emit("shareNotes", { noteId, userEmail });
+      socket.emit("shareNotes", { noteId, userEmail }, (data) => {
+        console.log(data);
+      });
     } catch (error) {
       if (error.response.status === 404)
         dispatch({

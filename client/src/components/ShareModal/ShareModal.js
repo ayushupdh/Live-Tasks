@@ -5,13 +5,13 @@ import { shareNotes } from "../../actions/notesActions";
 import "./ShareModal.css";
 
 class OptionModal extends React.Component {
-  state = { input: "" };
+  state = { input: "", noteId: this.props.noteId };
 
   callSubmit(e) {
     e.preventDefault();
-
     if (this.state.input) {
-      this.props.shareNotes(this.props.noteId, this.state.input);
+      // console.log(this.props);
+      this.props.shareNotes(this.state.noteId, this.state.input);
       setTimeout(() => {
         if (this.props.error === null) {
           this.props.toggleModalOpen();
