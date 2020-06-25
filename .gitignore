@@ -1,5 +1,7 @@
 node_modules
 
-
-.gitignore
+workspace_setup.sh
+mongo.sh
+server.sh
 dev.env
+.vscode

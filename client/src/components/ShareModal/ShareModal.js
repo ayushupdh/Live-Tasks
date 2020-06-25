@@ -4,10 +4,9 @@ import { connect } from "react-redux";
 import { shareNotes } from "../../actions/notesActions";
 import "./ShareModal.css";
 
-class OptionModal extends React.Component {
+class ShareModal extends React.Component {
   state = { input: "", noteId: this.props.noteId };
-
-  callSubmit(e) {
+  shareNoteHelper(e) {
     e.preventDefault();
     if (this.state.input) {
       // console.log(this.props);
@@ -38,7 +37,7 @@ class OptionModal extends React.Component {
             <div className="mt-3">
               <button
                 className="m-2 btn btn-success"
-                onClick={(e) => this.callSubmit(e)}
+                onClick={(e) => this.shareNoteHelper(e)}
               >
                 Share
               </button>
@@ -63,4 +62,4 @@ class OptionModal extends React.Component {
 const mapStateToProps = (state) => {
   return { error: state.error };
 };
-export default connect(mapStateToProps, { shareNotes })(OptionModal);
+export default connect(mapStateToProps, { shareNotes })(ShareModal);

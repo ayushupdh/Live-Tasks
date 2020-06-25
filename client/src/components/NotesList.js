@@ -5,7 +5,7 @@ import { addNote, getNotes, removeNote } from "../actions/notesActions";
 import { Link } from "react-router-dom";
 import ShareNote from "./ShareModal/ShareModal";
 import { ReactComponent as Options } from "../icon/menu.svg";
-import OptionModal from "./OptionModal/OptionModal";
+import DeleteModal from "./DeleteModal/DeleteModal";
 import "./NoteList.css";
 class NotesList extends Component {
   constructor() {
@@ -14,7 +14,7 @@ class NotesList extends Component {
       menuOpen: false,
       id: null,
       modalOpen: false,
-      optionModalOpen: false,
+      deleteModalOpen: false,
       content: null,
       btn1: null,
     };
@@ -52,23 +52,15 @@ class NotesList extends Component {
     this.props.addNote();
   };
 
-  removeNoteHelper = (id) => {
-    return this.props.removeNote(id);
-  };
-
-  handleOptionModal = () => {
-    if (this.state.optionModalOpen) {
-      // this.removeNoteHelper(this.state.id)
+  handledeleteModal = () => {
+    if (this.state.deleteModalOpen) {
       return (
         <Fragment>
-          <OptionModal
+          <DeleteModal
             content={this.state.content}
             btn1={this.state.btn1}
             id={this.state.id}
-            callback={
-              this.state.btn1 === "Delete" ? this.props.removeNote : null
-            }
-            toggleModal={this.toggleOptionModalOpen}
+            toggleModal={this.toggledeleteModalOpen}
           />
         </Fragment>
       );
@@ -89,8 +81,8 @@ class NotesList extends Component {
     }
   };
 
-  toggleOptionModalOpen = () => {
-    this.setState({ optionModalOpen: false });
+  toggledeleteModalOpen = () => {
+    this.setState({ deleteModalOpen: false });
   };
   toggleModalOpen = () => {
     this.setState({ modalOpen: false });
@@ -108,7 +100,7 @@ class NotesList extends Component {
           className="menu-dropdown-item"
           onClick={() => {
             this.setState({
-              optionModalOpen: true,
+              deleteModalOpen: true,
               content: "Are you sure you want to delete this note?",
               btn1: "Delete",
             });
@@ -177,14 +169,13 @@ class NotesList extends Component {
           <div className=" ">{this.renderNotesList()}</div>
         </div>
         {this.handleShare()}
-        {this.handleOptionModal()}
+        {this.handledeleteModal()}
       </div>
     );
   }
 }
 
 const mapStatetoProps = (state) => {
-  // console.log(state);
   return {
     noteList: state.noteList,
   };
