@@ -33,9 +33,12 @@ io.on("connection", async (socket) => {
   socket.on("shareNotes", async (data, cb) => {
     // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail: 'katie@go.com' }
     socket.join(data.noteId);
+    console.log(data);
     const sharedUserPresent = await SocketUsers.findOne({
       userEmail: data.userEmail,
     });
+    console.log(sharedUserPresent);
+
     if (sharedUserPresent) {
       socket.broadcast
         .to(sharedUserPresent.socketId)

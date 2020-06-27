@@ -107,20 +107,46 @@ router.delete("/notes/:id", auth, async (req, res) => {
 router.patch("/notes/share/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   const updates = req.body;
-
   const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
-  const userObj = await User.findOne({ email: updates.userEmail });
+
   try {
     if (updates.sharable === "true") {
-      if (!userObj) {
-        return res.status(404).send({ error: "No user with that email" });
+      //If no user with the email address
+      if (!note) {
+        return res.status(404).send({ error: "No such note found" });
       }
+
+      const userObj = await User.findOne({ email: updates.userEmail });
+      //If no user with the email address
+      if (!userObj) {
+        return res.status(404).send({ error: "No user with that email." });
+      }
+      //check if the email belongs to the owner
+      if (userObj._id.toString() === req.user._id.toString()) {
+        return res
+          .status(404)
+          .send({ error: "You already have access to this note." });
+      }
+
+      //Check if the userEmail already exists in sharedTo
+      const ifUserAlreadyExist = note.sharedTo.some(
+        (item) => item.user.toString() === userObj._id.toString()
+      );
+      if (ifUserAlreadyExist) {
+        return res
+          .status(404)
+          .send({ error: "User already has access to the note." });
+      }
+
+      //update the sharable status to true
       note["sharable"] = updates.sharable;
 
+      //add the sharedTO user if email is provided
       note.sharedTo = updates.userEmail
         ? note.sharedTo.concat({ user: userObj._id })
         : note.sharedTo;
-    } else if (updates.sharable === "false") {
+    }
+    if (updates.sharable === "false") {
       note["sharable"] = "false";
       note.sharedTo = [];
     }
