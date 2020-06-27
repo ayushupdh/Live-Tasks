@@ -7,6 +7,7 @@ import ShareNote from "./ShareModal/ShareModal";
 import { ReactComponent as Options } from "../icon/menu.svg";
 import DeleteModal from "./DeleteModal/DeleteModal";
 import "./NoteList.css";
+import { store } from "../store";
 class NotesList extends Component {
   constructor() {
     super();
@@ -86,6 +87,7 @@ class NotesList extends Component {
   };
   toggleModalOpen = () => {
     this.setState({ modalOpen: false });
+    store.dispatch({ type: "NO_ERROR" });
   };
   renderMenu() {
     return (

@@ -2,7 +2,9 @@ const app = require("./app");
 const http = require("http");
 const socketio = require("socket.io");
 const SocketUsers = require("./modals/socketUser");
-const { Socket } = require("dgram");
+const SocketRoom = require("./modals/socketRoom");
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
 
 const PORT = process.env.PORT || 3010;
 
@@ -32,11 +34,27 @@ io.on("connection", async (socket) => {
 
   socket.on("shareNotes", async (data, cb) => {
     // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail: 'katie@go.com' }
-    socket.join(data.noteId);
-    console.log(data);
+
+    //Find the shared note in SocketRoom Document
+    let room = await SocketRoom.find({ noteId: data.noteId });
+
+    //If the note has not been shared, create a new SocketRoom
+    if (!room) {
+      room = new SocketRoom({ noteId: data.noteId });
+
+      //Add the owner of the note to the room
+      const owner = await SocketUsers.find({ socketId: socket.id });
+      room.socketUsers.push({ user: owner.user, socketId: owner.socketId });
+      await room.save();
+    }
+
+    //Join a socket room using the SocketRoom's id
+    socket.join(room._id);
+
     const sharedUserPresent = await SocketUsers.findOne({
       userEmail: data.userEmail,
     });
+
     console.log(sharedUserPresent);
 
     if (sharedUserPresent) {

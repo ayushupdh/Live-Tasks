@@ -117,10 +117,12 @@ router.patch("/notes/share/:id", auth, async (req, res) => {
       }
 
       const userObj = await User.findOne({ email: updates.userEmail });
-      //If no user with the email address
+
+      //If no user with the provided email address
       if (!userObj) {
         return res.status(404).send({ error: "No user with that email." });
       }
+
       //check if the email belongs to the owner
       if (userObj._id.toString() === req.user._id.toString()) {
         return res
