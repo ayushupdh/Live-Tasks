@@ -37,13 +37,11 @@ io.on("connection", async (socket) => {
 
     //Find the shared note in SocketRoom Document
     let room = await SocketRoom.find({ noteId: data.noteId });
-
     //If the note has not been shared, create a new SocketRoom
-    if (!room) {
+    if (room.length === 0) {
       room = new SocketRoom({ noteId: data.noteId });
-
       //Add the owner of the note to the room
-      const owner = await SocketUsers.find({ socketId: socket.id });
+      const owner = await SocketUsers.findOne({ socketId: socket.id });
       room.socketUsers.push({ user: owner.user, socketId: owner.socketId });
       await room.save();
     }
@@ -55,9 +53,8 @@ io.on("connection", async (socket) => {
       userEmail: data.userEmail,
     });
 
-    console.log(sharedUserPresent);
-
     if (sharedUserPresent) {
+
       socket.broadcast
         .to(sharedUserPresent.socketId)
         .emit("sharedNote", data.noteId);

@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
         user: action.payload.user,
       };
     case SIGN_UP:
-      localStorage.setItem("token", action.payload._id);
+      localStorage.setItem("token", action.payload.token);
       return {
         userToken: action.payload.token,
         user: action.payload.user,

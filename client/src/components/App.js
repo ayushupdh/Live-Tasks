@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Router, Switch, Route } from "react-router-dom";
+import PrivateRoute from "./Routing/privateRoute";
 import Notes from "./Items/Notes";
 import Login from "./Login";
 import SignUp from "./SignUp";
@@ -19,8 +20,16 @@ class App extends Component {
           <Switch>
             <Route path="/" exact component={Login}></Route>
             <Route path="/signup" exact component={SignUp}></Route>
-            <Route path="/notes" exact component={NotesList}></Route>
-            <Route path="/notes/:id" exact component={Notes}></Route>
+            <PrivateRoute
+              path="/notes"
+              exact
+              component={NotesList}
+            ></PrivateRoute>
+            <PrivateRoute
+              path="/notes/:id"
+              exact
+              component={Notes}
+            ></PrivateRoute>
           </Switch>
         </Router>
       </div>
