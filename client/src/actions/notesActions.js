@@ -20,11 +20,11 @@ import {
 ////SOCKETIO//////
 
 socket.on("sharedNote", (data) => {
-  console.log("Shared note");
-  store.dispatch(getNotes());
+  console.log("Shared note" + data);
+  store.dispatch(updateNotes());
 
   socket.emit("joinNote", { noteId: data, user: "id" }, (sent) => {
-    console.log("asca");
+    console.log("join note");
     console.log(sent);
   });
 });
@@ -34,7 +34,7 @@ socket.on("message", (data) => {
 
 socket.on("removedNote", () => {
   console.log("removed");
-  store.dispatch(getNotes());
+  store.dispatch(updateNotes());
 });
 ///////////////    Notes ////////////////
 export const getNotes = () => {
@@ -48,9 +48,31 @@ export const getNotes = () => {
       socket.emit("userIdentify", { user: getState().user.user }, (message) => {
         console.log(message);
       });
+
+      getState().noteList.forEach((note) => {
+        if (note.sharable === "true") {
+          socket.emit(
+            "joinNote",
+            { noteId: note._id, user: getState().user.user },
+            (message) => {
+              console.log(message);
+            }
+          );
+        }
+      });
     } else {
       store.dispatch(getNotes());
     }
+  };
+};
+
+export const updateNotes = () => {
+  return async (dispatch, getState) => {
+    const response = await db.get("/notes/me", getAuthHeader(getState));
+    dispatch({
+      type: GET_NOTES,
+      payload: response.data,
+    });
   };
 };
 
