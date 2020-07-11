@@ -32,6 +32,13 @@ socket.on("message", (data) => {
   console.log(data);
 });
 
+socket.on("addedItemfromSomeone", (noteId) => {
+  store.dispatch(getItems(noteId));
+});
+socket.on("removedItemfromSomeone", ({ noteId, itemId }) => {
+  store.dispatch(removeItem(noteId, itemId));
+});
+
 socket.on("removedNote", () => {
   console.log("removed");
   store.dispatch(updateNotes());
@@ -181,6 +188,14 @@ export const addItem = (noteId, item) => {
       type: ADD_ITEM,
       payload: response.data,
     });
+
+    socket.emit(
+      "addedItem",
+      { noteId, userEmail: getState().user.user.email },
+      (data) => {
+        console.log(data);
+      }
+    );
   };
 };
 
@@ -206,6 +221,13 @@ export const removeItem = (noteId, itemId) => {
       type: REMOVE_ITEM,
       payload: itemId,
     });
+    socket.emit(
+      "addedItem",
+      { noteId, itemId, userEmail: getState().user.user.email },
+      (data) => {
+        console.log(data);
+      }
+    );
   };
 };
 
