@@ -90,6 +90,15 @@ io.on("connection", async (socket) => {
     callback("addedItem");
   });
 
+  socket.on("editedTitle", (data, callback) => {
+    // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail:email }
+
+    socket.broadcast
+      .to(data.noteId)
+      .emit("editedTitlefromSomeone", data.noteId);
+    callback("editedTitle");
+  });
+
   socket.on("removedItem", (data, callback) => {
     // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail:email }
     // io.in(data.noteId).emit("message", `${data.user} has joined`);

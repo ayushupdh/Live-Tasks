@@ -15,6 +15,7 @@ import {
   SHARE_NOTES,
   SHARE_FAILED,
   NO_ERROR,
+  UPDATE_NOTE,
 } from "./types";
 
 ////SOCKETIO//////
@@ -41,6 +42,10 @@ socket.on("removedItemfromSomeone", ({ noteId, itemId }) => {
 
 socket.on("editedItemfromSomeone", ({ noteId, itemId }) => {
   store.dispatch(getItems(noteId, itemId));
+});
+socket.on("editedTitlefromSomeone", (noteId) => {
+  console.log("edit");
+  store.dispatch(updateNote(noteId));
 });
 
 socket.on("removedNote", () => {
@@ -71,7 +76,7 @@ export const updateNote = (noteId) => {
   return async (dispatch, getState) => {
     const response = await db.get(`/notes/${noteId}`, getAuthHeader(getState));
     dispatch({
-      type: GET_NOTES,
+      type: UPDATE_NOTE,
       payload: response.data,
     });
   };
@@ -96,10 +101,8 @@ export const editTitle = (noteId, title) => {
       getAuthHeader(getState)
     );
 
-    socket.emit("editedTitle", { noteId, title }, (error) => {
-      if (error) {
-        alert(error);
-      }
+    socket.emit("editedTitle", { noteId, title }, (data) => {
+      console.log(data);
     });
 
     dispatch({
