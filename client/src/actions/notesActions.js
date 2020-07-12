@@ -36,7 +36,11 @@ socket.on("addedItemfromSomeone", (noteId) => {
   store.dispatch(getItems(noteId));
 });
 socket.on("removedItemfromSomeone", ({ noteId, itemId }) => {
-  store.dispatch(removeItem(noteId, itemId));
+  store.dispatch(getItems(noteId, itemId));
+});
+
+socket.on("editedItemfromSomeone", ({ noteId, itemId }) => {
+  store.dispatch(getItems(noteId, itemId));
 });
 
 socket.on("removedNote", () => {
@@ -51,25 +55,6 @@ export const getNotes = () => {
       type: GET_NOTES,
       payload: response.data,
     });
-    if (getState().user.user !== null) {
-      socket.emit("userIdentify", { user: getState().user.user }, (message) => {
-        console.log(message);
-      });
-
-      getState().noteList.forEach((note) => {
-        if (note.sharable === "true") {
-          socket.emit(
-            "joinNote",
-            { noteId: note._id, user: getState().user.user },
-            (message) => {
-              console.log(message);
-            }
-          );
-        }
-      });
-    } else {
-      store.dispatch(getNotes());
-    }
   };
 };
 
@@ -82,7 +67,15 @@ export const updateNotes = () => {
     });
   };
 };
-
+export const updateNote = (noteId) => {
+  return async (dispatch, getState) => {
+    const response = await db.get(`/notes/${noteId}`, getAuthHeader(getState));
+    dispatch({
+      type: GET_NOTES,
+      payload: response.data,
+    });
+  };
+};
 export const addNote = () => {
   return async (dispatch, getState) => {
     const response = await db.post("/notes", {}, getAuthHeader(getState));
@@ -103,7 +96,7 @@ export const editTitle = (noteId, title) => {
       getAuthHeader(getState)
     );
 
-    socket.emit("editTitle", { noteId, title }, (error) => {
+    socket.emit("editedTitle", { noteId, title }, (error) => {
       if (error) {
         alert(error);
       }
@@ -211,6 +204,13 @@ export const editItem = (noteId, itemId, item) => {
       type: EDIT_ITEM,
       payload: response.data,
     });
+    socket.emit(
+      "editedItem",
+      { noteId, itemId, userEmail: getState().user.user.email },
+      (data) => {
+        console.log(data);
+      }
+    );
   };
 };
 

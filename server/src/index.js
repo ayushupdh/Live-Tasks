@@ -37,24 +37,13 @@ io.on("connection", async (socket) => {
   socket.on("shareNotes", async (data, cb) => {
     // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail: 'katie@go.com' }
 
-    //Find the shared note in SocketRoom Document
-    // let room = await SocketRoom.find({ noteId: data.noteId });
-    // //If the note has not been shared, create a new SocketRoom
-    // if (room.length === 0) {
-    //   room = new SocketRoom({ noteId: data.noteId });
-    //   //Add the owner of the note to the room
-    //   const owner = await SocketUsers.findOne({ socketId: socket.id });
-    //   room.socketUsers.push({ user: owner.user });
-    //   await room.save();
-    // }
-
-    //Join a socket room using the SocketRoom's id
+    //Join a socket room using the notes' id
     socket.join(data.noteId);
 
     const sharedUserPresent = await SocketUsers.findOne({
       userEmail: data.userEmail,
     });
-    // console.log(sharedUserPresent);
+    console.log("Socket user present: " + sharedUserPresent);
     // console.log("outside");
     if (sharedUserPresent) {
       // console.log("inside");
@@ -74,9 +63,9 @@ io.on("connection", async (socket) => {
     socket.join(data.noteId);
     // io.in(data.noteId).emit("message", `${data.user} has joined`);
     callback("Joined note");
-    console.log("inside join");
+    // console.log("inside join");
     let rooms = Object.keys(socket.rooms);
-    console.log(rooms); // [ <socket.id>, 'room 237' ]
+    // console.log(rooms); // [ <socket.id>, 'room 237' ]
   });
 
   socket.on("removeNote", (noteId, cb) => {
@@ -94,7 +83,7 @@ io.on("connection", async (socket) => {
   socket.on("addedItem", (data, callback) => {
     // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail:email }
     // io.in(data.noteId).emit("message", `${data.user} has joined`);
-    console.log("inside add");
+    // console.log("inside add");
     // console.log(data);
 
     socket.broadcast.to(data.noteId).emit("addedItemfromSomeone", data.noteId);
@@ -104,21 +93,29 @@ io.on("connection", async (socket) => {
   socket.on("removedItem", (data, callback) => {
     // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail:email }
     // io.in(data.noteId).emit("message", `${data.user} has joined`);
-    console.log("inside remove");
     // console.log(data);
 
-    socket.broadcast
-      .to(data.noteId)
-      .emit("removedItemfromSomeone", {
-        noteId: data.noteId,
-        itemId: data.itemId,
-      });
+    socket.broadcast.to(data.noteId).emit("removedItemfromSomeone", {
+      noteId: data.noteId,
+      itemId: data.itemId,
+    });
     callback("addedItem");
+  });
+  socket.on("editedItem", (data, callback) => {
+    // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail:email }
+
+    socket.broadcast.to(data.noteId).emit("editedItemfromSomeone", {
+      noteId: data.noteId,
+      itemId: data.itemId,
+    });
+    callback("editedItem");
   });
 
   socket.on("disconnect", async () => {
     console.log("One user has left");
-    await SocketUsers.findOneAndDelete({ socketId: socket.id });
+    const socketId = socket.id;
+    // console.log(socketId);
+    await SocketUsers.findOneAndDelete({ socketId });
   });
 
   // socket.on("editTitle", () => {

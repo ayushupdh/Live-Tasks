@@ -10,6 +10,7 @@ export const NO_ERROR = "NO_ERROR";
 
 export const GET_NOTES = "GET_NOTES";
 export const ADD_NOTE = "ADD_NOTE";
+export const UPDATE_NOTE = "UPDATE_NOTE";
 export const EDIT_TITLE = "EDIT_TITLE";
 export const REMOVE_NOTES = "REMOVE_NOTES";
 export const SHARE_NOTES = "SHARE_NOTES";

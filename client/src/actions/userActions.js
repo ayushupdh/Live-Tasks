@@ -8,6 +8,7 @@ import {
 } from "./types";
 import db from "../apis/db";
 import history from "../history";
+import socket from "./socketHandler";
 
 //// LOAD USER /////
 export const loadUser = () => async (dispatch, getState) => {
@@ -18,6 +19,24 @@ export const loadUser = () => async (dispatch, getState) => {
       type: LOAD_USER,
       payload: response.data,
     });
+    const user = getState().user.user;
+    if (user !== null) {
+      socket.emit("userIdentify", { user }, (message) => {});
+
+      getState().noteList.forEach((note) => {
+        if (note.sharable === "true") {
+          socket.emit(
+            "joinNote",
+            { noteId: note._id, user: user },
+            (message) => {
+              console.log(message);
+            }
+          );
+        }
+      });
+    } else {
+      console.log("User not found");
+    }
   } catch (error) {
     console.log(error);
     // dispatch({

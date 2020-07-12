@@ -4,10 +4,15 @@ import {
   EDIT_TITLE,
   REMOVE_NOTES,
   SHARE_NOTES,
+  UPDATE_NOTE,
 } from "../actions/types";
 export default (notes = [], action) => {
   switch (action.type) {
     case EDIT_TITLE:
+      return notes.map((note) =>
+        note._id === action.payload._id ? action.payload : note
+      );
+    case UPDATE_NOTE:
       return notes.map((note) =>
         note._id === action.payload._id ? action.payload : note
       );
