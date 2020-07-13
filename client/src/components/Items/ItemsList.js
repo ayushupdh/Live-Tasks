@@ -26,8 +26,9 @@ class ItemsList extends Component {
     return this.props.listItemArray.map((itemObject) => {
       return (
         <div
-          className="mb-2 shadow-sm border clearfix p-3 rounded "
+          className="mb-2 shadow-sm border clearfix p-3 "
           key={itemObject._id}
+          style={{ borderRadius: "100px", backgroundColor: "#fff" }}
         >
           <input
             className="form-check-input ml-1"
@@ -42,7 +43,7 @@ class ItemsList extends Component {
             <button
               onClick={() => this.onClickRemove(itemObject._id)}
               type="button"
-              className="close"
+              className="close mr-2 "
               aria-label="Close"
             >
               <span aria-hidden="true">&times;</span>
@@ -59,7 +60,7 @@ class ItemsList extends Component {
                 : { outline: "0px solid transparent" }
             }
             suppressContentEditableWarning={true}
-            className="ml-4"
+            className="ml-5"
             contentEditable={true}
             onBlur={(e) =>
               this.onClickEdit(itemObject._id, {

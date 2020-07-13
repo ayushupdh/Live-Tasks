@@ -8,12 +8,18 @@ class SearchBox extends Component {
     return (
       <div className="mb-4 input-group">
         <input
+          style={{ borderRadius: "100px" }}
           className="form-control"
           value={input.value}
           onChange={input.onChange}
           placeholder="Add item"
         ></input>
-        <button className="btn btn-success">Add</button>
+        <button
+          style={{ borderRadius: "100px" }}
+          className="px-4 ml-2 btn btn-success"
+        >
+          Add
+        </button>
       </div>
     );
   };

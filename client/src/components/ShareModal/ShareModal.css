@@ -3,8 +3,14 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 2%;
+  border-radius: 10px;
   border: 1px solid #6eff6e;
-  background-color: white;
+  background-color: #fff;
   padding: 1.5rem;
+}
+.form-control {
+  border-radius: 100px;
+}
+.btn {
+  border-radius: 100px;
 }

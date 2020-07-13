@@ -11,13 +11,13 @@ const ProfileDropDown = (props) => {
       return (
         <div className="dropdown">
           {props.user && (
-            <div href="#" className="menu-item text-white ">
+            <div href="#" className="menu-item  ">
               {props.user.name}
             </div>
           )}
           <div
             href="#"
-            className="menu-item text-white "
+            className="menu-item  "
             onClick={() => props.signoutUser()}
           >
             Logout

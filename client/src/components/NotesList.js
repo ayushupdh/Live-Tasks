@@ -98,6 +98,7 @@ class NotesList extends Component {
         >
           Share
         </div>
+        <hr />
         <div
           className="menu-dropdown-item"
           onClick={() => {
@@ -121,13 +122,14 @@ class NotesList extends Component {
     return this.props.noteList.map((note) => {
       return (
         <div
-          className="mb-2 shadow-sm border container p-3 rounded"
+          className="mb-2 shadow-sm border p-3  "
           key={note._id}
+          style={{ borderRadius: "100px", backgroundColor: "#fff" }}
         >
           <div className="row">
             {/* Note title */}
-            <div className="col-9">
-              <Link to={`/notes/${note._id}`} className=" h5 text-body  ">
+            <div className="col-9 ">
+              <Link to={`/notes/${note._id}`} className=" h5 ml-3  text-body  ">
                 {note.title}
               </Link>
             </div>
@@ -158,12 +160,16 @@ class NotesList extends Component {
     return (
       <div>
         <Header></Header>
-        <div className="shadow-sm border p-5 rounded">
+        <div
+          className="shadow-lg border p-5 "
+          style={{ borderRadius: "10px", backgroundColor: "#eeeeee" }}
+        >
           <div className="mb-4 ">
             <button
               type="button"
               onClick={this.createNoteHelper}
               className="btn btn-success"
+              style={{ borderRadius: "100px" }}
             >
               Create Notes
             </button>

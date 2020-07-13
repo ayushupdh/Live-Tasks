@@ -34,9 +34,9 @@ class ShareModal extends React.Component {
             {this.props.error && (
               <div className="text-danger">{this.props.error}</div>
             )}
-            <div className="mt-3">
+            <div className="mt-3 text-center">
               <button
-                className="m-2 btn btn-success"
+                className="m-2 p-2 px-4 btn btn-success"
                 onClick={(e) => this.shareNoteHelper(e)}
               >
                 Share
@@ -46,7 +46,7 @@ class ShareModal extends React.Component {
                   e.preventDefault();
                   this.props.toggleModalOpen();
                 }}
-                className=" m-2 btn btn-danger"
+                className=" m-2  p-2 px-4 btn btn-danger"
               >
                 Cancel
               </button>

@@ -12,7 +12,7 @@ class DeleteModal extends React.Component {
     return ReactDOM.createPortal(
       <div className="outer-container ">
         <div className="share-container shadow">
-          <div className="mt-3">
+          <div className="mt-3 text-center">
             <p>{this.props.content}</p>
             <button
               onClick={() => {

@@ -6,9 +6,18 @@ import ProfileDropDown from "./ProfileDropDown";
 class Header extends Component {
   render() {
     return (
-      <div className="p-1  clearfix text-center border shadow-sm  mb-5">
-        <h1 className="float-left ml-3"> Live Tasks</h1>
-        <div className="float-right mr-4 mt-2 ">
+      <div
+        className="p-3  clearfix text-center  shadow-sm  mb-5"
+        style={{
+          backgroundColor: "#092532",
+          borderRadius: "10px",
+          margin: "-5px",
+        }}
+      >
+        <h1 className="float-left h2 ml-4" style={{ color: "#99d8d0" }}>
+          Live Tasks
+        </h1>
+        <div className="float-right mr-5 mt-0 ">
           <ProfileDropDown
             signoutUser={this.props.signoutUser}
             user={this.props.user}

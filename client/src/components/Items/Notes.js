@@ -5,7 +5,7 @@ import AddItemsBar from "./AddItemsBar";
 import ItemsList from "./ItemsList";
 import history from "../../history";
 import { getNotes, editTitle } from "../../actions/notesActions";
-
+import Header from "../Header/Header";
 class Notes extends Component {
   constructor(props) {
     super(props);
@@ -49,11 +49,13 @@ class Notes extends Component {
     return ReactDOM.createPortal(
       <div
         onClick={() => history.push("/notes")}
-        className="min-vh-100 d-inline-block w-100 bg-light"
+        className="min-vh-100 d-inline-block w-100 "
+        style={{ backgroundColor: "#f4f6ff" }}
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className=" w-50 mx-auto border mt-5 p-3 rounded bg-white"
+          className=" w-50 mx-auto border mt-5 p-3 "
+          style={{ backgroundColor: "#eeeeee", borderRadius: "10px" }}
         >
           <div className="p-2">
             <div className="clearfix">
