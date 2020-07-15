@@ -5,7 +5,6 @@ import AddItemsBar from "./AddItemsBar";
 import ItemsList from "./ItemsList";
 import history from "../../history";
 import { getNotes, editTitle } from "../../actions/notesActions";
-import Header from "../Header/Header";
 class Notes extends Component {
   constructor(props) {
     super(props);
