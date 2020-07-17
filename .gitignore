@@ -5,3 +5,4 @@ mongo.sh
 server.sh
 dev.env
 .vscode
+.gitignore

@@ -41,19 +41,22 @@ class Notes extends Component {
     if (this.props.title === "") {
       return "Title";
     }
-
     return this.props.title;
   }
+  closeNoteHelper = () => {
+    this.divRef.current.blur();
+    history.push("/notes");
+  };
   render() {
     return ReactDOM.createPortal(
       <div
-        onClick={() => history.push("/notes")}
+        onClick={this.closeNoteHelper}
         className="min-vh-100 d-inline-block w-100 "
         style={{ backgroundColor: "#f4f6ff" }}
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className=" w-50 mx-auto border mt-5 p-3 "
+          className=" w-50 mx-auto border mt-5 p-3 shadow "
           style={{ backgroundColor: "#eeeeee", borderRadius: "10px" }}
         >
           <div className="p-2">
@@ -75,7 +78,7 @@ class Notes extends Component {
                 </div>
               </div>
               <button
-                onClick={() => history.push("/notes")}
+                onClick={this.closeNoteHelper}
                 type="button"
                 className="close"
                 aria-label="Close"
