@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "./Routing/privateRoute";
 import Notes from "./Items/Notes";
 import Login from "./Login";
@@ -7,6 +7,7 @@ import SignUp from "./SignUp";
 import history from "../history";
 import NotesList from "./NotesList";
 import { store } from "../store";
+import { connect } from "react-redux";
 import "./App.css";
 import { loadUser } from "../actions/userActions";
 class App extends Component {
@@ -21,8 +22,20 @@ class App extends Component {
       >
         <Router history={history}>
           <Switch>
-            <Route path="/" exact component={Login}></Route>
-            <Route path="/signup" exact component={SignUp}></Route>
+            <Route path="/" exact>
+              {this.props.isAuthenticated ? (
+                <Redirect to="/notes"></Redirect>
+              ) : (
+                <Login />
+              )}
+            </Route>
+            <Route path="/signup">
+              {this.props.isAuthenticated ? (
+                <Redirect to="/notes"></Redirect>
+              ) : (
+                <SignUp />
+              )}
+            </Route>
             <PrivateRoute
               path="/notes"
               exact
@@ -40,4 +53,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.user.userToken !== null,
+  };
+};
+
+export default connect(mapStateToProps)(App);
