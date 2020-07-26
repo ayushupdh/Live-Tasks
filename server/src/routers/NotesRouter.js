@@ -33,7 +33,8 @@ router.get("/notes", async (req, res) => {
 //Get all the notes of a user
 router.get("/notes/me", auth, async (req, res) => {
   try {
-    const notes = await Notes.find({ $or: sharableFindQuery(req) });
+    let notes = await Notes.find({ $or: sharableFindQuery(req) });
+
     res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);
@@ -52,8 +53,13 @@ router.get("/notes/:id", auth, async (req, res) => {
         },
       ],
     });
-    // await notes.populate("owner").execPopulate(); //Get the owners info
-    res.status(200).send(notes);
+    const notesObject = notes.toObject();
+    delete notesObject["sharable"];
+    delete notesObject["_id"];
+    delete notesObject["owner"];
+    delete notesObject["sharedTo"];
+    delete notesObject["__v"];
+    res.status(200).send(notesObject);
   } catch (e) {
     res.sendStatus(400);
   }
