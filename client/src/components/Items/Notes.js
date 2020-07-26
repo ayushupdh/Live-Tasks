@@ -5,78 +5,48 @@ import AddItemsBar from "./AddItemsBar";
 import ItemsList from "./ItemsList";
 import history from "../../history";
 import { getNotes, editTitle } from "../../actions/notesActions";
+import "./Notes.css";
 class Notes extends Component {
-  constructor(props) {
-    super(props);
-    this.divRef = React.createRef();
-    this.nextRef = React.createRef();
+  constructor() {
+    super();
+
+    this.state = { title: "" };
   }
   componentDidMount() {
-    this.props.getNotes();
-    this.divRef.current.focus();
-  }
-
-  // TODO ---- FIND  A BETTER SOLUTION
-  focusHelper = () => {
-    // document.execCommand("selectAll", false, "");
-
-    const el = this.divRef.current;
-    if (el.childNodes[0]) {
-      const range = document.createRange();
-      const sel = window.getSelection();
-      range.setStart(el.childNodes[0], el.childNodes[0].data.length);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      el.focus();
+    if (!this.props.noteList) {
+      this.props.getNotes();
     }
-  };
-
+    console.log(this.props.title);
+    this.setState({ title: this.props.title });
+  }
+  com;
   onEditHandler = (title) => {
     if (title === "") {
       return this.props.editTitle(this.props.noteId, "Title");
     }
     return this.props.editTitle(this.props.noteId, title);
   };
-  titleHelper() {
-    if (this.props.title === "") {
-      return "Title";
-    }
-    return this.props.title;
-  }
+
   closeNoteHelper = () => {
-    this.divRef.current.blur();
     history.push("/notes");
   };
   render() {
     return ReactDOM.createPortal(
-      <div
-        onClick={this.closeNoteHelper}
-        className="min-vh-100 d-inline-block w-100 "
-        style={{ backgroundColor: "#f4f6ff" }}
-      >
+      <div onClick={this.closeNoteHelper} className="noteMainContainer">
         <div
           onClick={(e) => e.stopPropagation()}
-          className=" w-50 mx-auto border mt-5 p-3 shadow "
-          style={{ backgroundColor: "#eeeeee", borderRadius: "10px" }}
+          className="notesInnerContainer"
         >
+          {console.log(this.props.title)}
           <div className="p-2">
-            <div className="clearfix">
-              <div>
-                <div
-                  style={{
-                    outline: 0,
-                  }}
-                  onFocus={this.focusHelper}
-                  ref={this.divRef}
-                  suppressContentEditableWarning={true}
-                  className="h4 mb-4 float-left"
-                  contentEditable={true}
-                  onBlur={(e) => this.onEditHandler(e.target.innerHTML)}
-                  placeholder="Title"
-                >
-                  {this.titleHelper()}
-                </div>
-              </div>
+            <div className="titleBar">
+              <input
+                className="titleContainer"
+                value={this.state.title}
+                onChange={(e) => this.setState({ title: e.target.value })}
+                onBlur={(e) => this.onEditHandler(e.target.value)}
+                placeholder="Title"
+              ></input>
               <button
                 onClick={this.closeNoteHelper}
                 type="button"
@@ -100,6 +70,7 @@ class Notes extends Component {
 const mapStatetoProps = (state, ownProps) => {
   // TODO FIND A BETTER WAY TO GET THE NOTE TITLE
   let title = "";
+
   for (let i = 0; i < state.noteList.length; i++) {
     if (state.noteList[i]._id === ownProps.match.params.id) {
       title = state.noteList[i].title;

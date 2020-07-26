@@ -6,7 +6,7 @@ import notesReducers from "./notesReducer";
 import userReducer from "./userReducer";
 import errorReducer from "./errorReducer";
 export default combineReducers({
-  listItems: itemReducer,
+  note: itemReducer,
   form: formReducer,
   noteList: notesReducers,
   user: userReducer,

@@ -21,16 +21,16 @@ import {
 ////SOCKETIO//////
 
 socket.on("sharedNote", (data) => {
-  console.log("Shared note" + data);
+  // console.log("Shared note" + data);
   store.dispatch(updateNotes());
 
   socket.emit("joinNote", { noteId: data, user: "id" }, (sent) => {
-    console.log("join note");
-    console.log(sent);
+    // console.log("join note");
+    // console.log(sent);
   });
 });
 socket.on("message", (data) => {
-  console.log(data);
+  // console.log(data);
 });
 
 socket.on("addedItemfromSomeone", (noteId) => {
@@ -44,12 +44,12 @@ socket.on("editedItemfromSomeone", ({ noteId, itemId }) => {
   store.dispatch(getItems(noteId, itemId));
 });
 socket.on("editedTitlefromSomeone", (noteId) => {
-  console.log("edit");
+  // console.log("edit");
   store.dispatch(updateNote(noteId));
 });
 
 socket.on("removedNote", () => {
-  console.log("removed");
+  // console.log("removed");
   store.dispatch(updateNotes());
 });
 ///////////////    Notes ////////////////
@@ -100,16 +100,13 @@ export const editTitle = (noteId, title) => {
       { title },
       getAuthHeader(getState)
     );
-
-    socket.emit("editedTitle", { noteId, title }, (data) => {
-      console.log(data);
-    });
-
     dispatch({
       type: EDIT_TITLE,
       payload: response.data,
     });
-    history.push(`/notes/${response.data._id}`);
+    socket.emit("editedTitle", { noteId, title }, (data) => {
+      // console.log(data);
+    });
   };
 };
 
@@ -122,7 +119,7 @@ export const removeNote = (noteId) => {
     });
 
     socket.emit("removeNote", noteId, (message) => {
-      console.log(message);
+      // console.log(message);
     });
   };
 };
@@ -149,7 +146,7 @@ export const shareNotes = (noteId, userEmail) => {
       });
 
       socket.emit("shareNotes", { noteId, userEmail }, (data) => {
-        console.log(data);
+        // console.log(data);
       });
     } catch (error) {
       if (error.response.status === 404)
@@ -165,6 +162,7 @@ export const shareNotes = (noteId, userEmail) => {
 export const getItems = (noteId) => {
   return async (dispatch, getState) => {
     const response = await db.get(`/notes/${noteId}`, getAuthHeader(getState));
+    console.log(response.data);
     dispatch({
       type: GET_ITEMS,
       payload: response.data.itemsCollections,
@@ -189,7 +187,7 @@ export const addItem = (noteId, item) => {
       "addedItem",
       { noteId, userEmail: getState().user.user.email },
       (data) => {
-        console.log(data);
+        // console.log(data);
       }
     );
   };
@@ -211,7 +209,7 @@ export const editItem = (noteId, itemId, item) => {
       "editedItem",
       { noteId, itemId, userEmail: getState().user.user.email },
       (data) => {
-        console.log(data);
+        // console.log(data);
       }
     );
   };
@@ -228,7 +226,7 @@ export const removeItem = (noteId, itemId) => {
       "addedItem",
       { noteId, itemId, userEmail: getState().user.user.email },
       (data) => {
-        console.log(data);
+        // console.log(data);
       }
     );
   };

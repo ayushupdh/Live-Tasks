@@ -80,7 +80,7 @@ class ItemsList extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    listItemArray: state.listItems,
+    listItemArray: state.note,
     noteId: ownProps.match.params.id,
   };
 };
