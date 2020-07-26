@@ -21,24 +21,35 @@ class ItemsList extends Component {
 
   generateItem = () => {
     if (this.props.listItemArray.length === 0) {
-      return <div>Add an Item to the List</div>;
+      return <div className="addItemMessage">Add an Item to the List</div>;
     }
     return this.props.listItemArray.map((itemObject) => {
       return (
-        <div
-          className="mb-2 shadow-sm border clearfix p-3 "
-          key={itemObject._id}
-          style={{ borderRadius: "100px", backgroundColor: "#fff" }}
-        >
-          <input
-            className="form-check-input ml-1"
-            type="checkbox"
-            checked={itemObject.completed}
-            aria-label="Checkbox"
-            onChange={() => {
-              this.onCheck(itemObject._id, itemObject.completed);
-            }}
-          />
+        <div className="itemsListContainer " key={itemObject._id}>
+          <div className="checkBox">
+            <input
+              type="checkbox"
+              className="checkbox"
+              checked={itemObject.completed}
+              aria-label="Checkbox"
+              onChange={() => {
+                this.onCheck(itemObject._id, itemObject.completed);
+              }}
+            />
+          </div>
+
+          <div
+            className={itemObject.completed ? "checked item" : "item"}
+            suppressContentEditableWarning={true}
+            contentEditable={true}
+            onBlur={(e) =>
+              this.onClickEdit(itemObject._id, {
+                item: e.currentTarget.textContent,
+              })
+            }
+          >
+            {itemObject.item}
+          </div>
           <div>
             <button
               onClick={() => this.onClickRemove(itemObject._id)}
@@ -48,27 +59,6 @@ class ItemsList extends Component {
             >
               <span aria-hidden="true">&times;</span>
             </button>
-          </div>
-
-          <div
-            style={
-              itemObject.completed
-                ? {
-                    textDecoration: "line-through",
-                    outline: "0px solid transparent",
-                  }
-                : { outline: "0px solid transparent" }
-            }
-            suppressContentEditableWarning={true}
-            className="ml-5"
-            contentEditable={true}
-            onBlur={(e) =>
-              this.onClickEdit(itemObject._id, {
-                item: e.currentTarget.textContent,
-              })
-            }
-          >
-            {itemObject.item}
           </div>
         </div>
       );

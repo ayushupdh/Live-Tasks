@@ -1,0 +1,16 @@
+.MainContainer {
+  position: relative;
+  width: 50%;
+  margin: auto;
+  padding: 4%;
+  top: 40px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  padding-bottom: 50px;
+}
+
+@media (max-width: 600px) {
+  .MainContainer {
+    width: 85%;
+  }
+}

@@ -6,20 +6,13 @@ import { Field, reduxForm } from "redux-form";
 class SearchBox extends Component {
   renderinputListItem = ({ input }) => {
     return (
-      <div className="mb-4 input-group">
+      <div className="addItemContainer">
         <input
-          style={{ borderRadius: "100px" }}
           className="form-control"
           value={input.value}
           onChange={input.onChange}
           placeholder="Add item"
         ></input>
-        <button
-          style={{ borderRadius: "100px" }}
-          className="px-4 ml-2 btn btn-success"
-        >
-          Add
-        </button>
       </div>
     );
   };

@@ -3,7 +3,7 @@ import { Field, reduxForm, SubmissionError } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { signinUser } from "../actions/userActions";
-
+import "./Auth.css";
 class Login extends Component {
   generateBoxes = ({ label, input, meta, type }) => {
     return (
@@ -39,16 +39,13 @@ class Login extends Component {
   };
   render() {
     return (
-      <div
-        className=" mx-auto  w-50  border mt-4 p-5"
-        style={{ backgroundColor: "#eeeeee" }}
-      >
+      <div className="MainContainer" style={{ backgroundColor: "#eeeeee" }}>
         <h1 className="text-center pb-5">Live Tasks</h1>
         <form
           className="form-group"
           onSubmit={this.props.handleSubmit(this.onSubmitHelper)}
         >
-          <h4> Login</h4>
+          <h4 className="text-center"> Login</h4>
           <Field
             name="email"
             type="email"
