@@ -1,6 +1,0 @@
-node_modules
-config/dev.env
-dev.env
-.vscode
-.gitignore
-mongo.sh
