@@ -1,4 +1,4 @@
-import db from "../apis/db";
+import axios from "axios";
 import history from "../history";
 import socket from "./socketHandler";
 import { store } from "../store";
@@ -21,16 +21,16 @@ import {
 ////SOCKETIO//////
 
 socket.on("sharedNote", (data) => {
-  // console.log("Shared note" + data);
+  console.log("Shared note" + data);
   store.dispatch(updateNotes());
 
   socket.emit("joinNote", { noteId: data, user: "id" }, (sent) => {
-    // console.log("join note");
+    console.log("join note");
     // console.log(sent);
   });
 });
 socket.on("message", (data) => {
-  // console.log(data);
+  console.log(data);
 });
 
 socket.on("addedItemfromSomeone", (noteId) => {
@@ -44,18 +44,18 @@ socket.on("editedItemfromSomeone", ({ noteId, itemId }) => {
   store.dispatch(getItems(noteId, itemId));
 });
 socket.on("editedTitlefromSomeone", (noteId) => {
-  // console.log("edit");
+  console.log("edit");
   store.dispatch(updateNote(noteId));
 });
 
 socket.on("removedNote", () => {
-  // console.log("removed");
+  console.log("removed");
   store.dispatch(updateNotes());
 });
 ///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch, getState) => {
-    const response = await db.get("/notes/me", getAuthHeader(getState));
+    const response = await axios.get("/notes/me", getAuthHeader(getState));
     dispatch({
       type: GET_NOTES,
       payload: response.data,
@@ -65,7 +65,7 @@ export const getNotes = () => {
 
 export const updateNotes = () => {
   return async (dispatch, getState) => {
-    const response = await db.get("/notes/me", getAuthHeader(getState));
+    const response = await axios.get("/notes/me", getAuthHeader(getState));
     dispatch({
       type: GET_NOTES,
       payload: response.data,
@@ -74,7 +74,12 @@ export const updateNotes = () => {
 };
 export const updateNote = (noteId) => {
   return async (dispatch, getState) => {
-    const response = await db.get(`/notes/${noteId}`, getAuthHeader(getState));
+    const response = await axios.get(
+      `/notes/${noteId}`,
+      getAuthHeader(getState)
+    );
+    console.log(response.data);
+    console.log("");
     dispatch({
       type: UPDATE_NOTE,
       payload: response.data,
@@ -83,7 +88,7 @@ export const updateNote = (noteId) => {
 };
 export const addNote = () => {
   return async (dispatch, getState) => {
-    const response = await db.post("/notes", {}, getAuthHeader(getState));
+    const response = await axios.post("/notes", {}, getAuthHeader(getState));
 
     dispatch({
       type: ADD_NOTE,
@@ -95,7 +100,7 @@ export const addNote = () => {
 
 export const editTitle = (noteId, title) => {
   return async (dispatch, getState) => {
-    const response = await db.patch(
+    const response = await axios.patch(
       `/notes/${noteId}`,
       { title },
       getAuthHeader(getState)
@@ -112,7 +117,7 @@ export const editTitle = (noteId, title) => {
 
 export const removeNote = (noteId) => {
   return async (dispatch, getState) => {
-    await db.delete(`/notes/${noteId}`, getAuthHeader(getState));
+    await axios.delete(`/notes/${noteId}`, getAuthHeader(getState));
     dispatch({
       type: REMOVE_NOTES,
       payload: noteId,
@@ -130,7 +135,7 @@ export const shareNotes = (noteId, userEmail) => {
       userEmail,
     };
     try {
-      const response = await db.patch(
+      const response = await axios.patch(
         `/notes/share/${noteId}`,
         body,
         getAuthHeader(getState)
@@ -161,7 +166,10 @@ export const shareNotes = (noteId, userEmail) => {
 /////////////////// Items  ////////////////
 export const getItems = (noteId) => {
   return async (dispatch, getState) => {
-    const response = await db.get(`/notes/${noteId}`, getAuthHeader(getState));
+    const response = await axios.get(
+      `/notes/${noteId}`,
+      getAuthHeader(getState)
+    );
     console.log(response.data);
     dispatch({
       type: GET_ITEMS,
@@ -173,7 +181,7 @@ export const getItems = (noteId) => {
 export const addItem = (noteId, item) => {
   const noteItem = { item: item };
   return async (dispatch, getState) => {
-    const response = await db.post(
+    const response = await axios.post(
       `/notes/${noteId}`,
       noteItem,
       getAuthHeader(getState)
@@ -195,7 +203,7 @@ export const addItem = (noteId, item) => {
 
 export const editItem = (noteId, itemId, item) => {
   return async (dispatch, getState) => {
-    const response = await db.patch(
+    const response = await axios.patch(
       `/notes/${noteId}/${itemId}`,
       item,
       getAuthHeader(getState)
@@ -217,7 +225,7 @@ export const editItem = (noteId, itemId, item) => {
 
 export const removeItem = (noteId, itemId) => {
   return async (dispatch, getState) => {
-    await db.delete(`/notes/${noteId}/${itemId}`, getAuthHeader(getState));
+    await axios.delete(`/notes/${noteId}/${itemId}`, getAuthHeader(getState));
     dispatch({
       type: REMOVE_ITEM,
       payload: itemId,

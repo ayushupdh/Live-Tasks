@@ -16,7 +16,7 @@ class Notes extends Component {
     if (!this.props.noteList) {
       this.props.getNotes();
     }
-    console.log(this.props.title);
+
     this.setState({ title: this.props.title });
   }
   com;
@@ -37,7 +37,6 @@ class Notes extends Component {
           onClick={(e) => e.stopPropagation()}
           className="notesInnerContainer"
         >
-          {console.log(this.props.title)}
           <div className="p-2">
             <div className="titleBar">
               <input

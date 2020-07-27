@@ -25,6 +25,8 @@ router.post("/notes", auth, async (req, res) => {
 router.get("/notes", async (req, res) => {
   try {
     const notes = await Notes.find();
+    const notesObject = notes.toObject();
+    delete notesObject["itemsCollections"];
     res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);
@@ -53,13 +55,7 @@ router.get("/notes/:id", auth, async (req, res) => {
         },
       ],
     });
-    const notesObject = notes.toObject();
-    delete notesObject["sharable"];
-    delete notesObject["_id"];
-    delete notesObject["owner"];
-    delete notesObject["sharedTo"];
-    delete notesObject["__v"];
-    res.status(200).send(notesObject);
+    res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);
   }

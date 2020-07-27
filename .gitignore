@@ -1,8 +1,6 @@
 node_modules
-
-workspace_setup.sh
-mongo.sh
-server.sh
+config/dev.env
 dev.env
 .vscode
 .gitignore
+mongo.sh

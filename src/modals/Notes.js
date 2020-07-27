@@ -45,14 +45,6 @@ const notesSchema = new mongoose.Schema(
   }
 );
 
-notesSchema.methods.toJSON = function () {
-  const notes = this;
-  const notesObject = notes.toObject();
-
-  delete notesObject.itemsCollections;
-
-  return notesObject;
-};
 const Notes = mongoose.model("Notes", notesSchema);
 
 module.exports = Notes;
