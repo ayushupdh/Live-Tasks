@@ -25,8 +25,6 @@ router.post("/api/notes", auth, async (req, res) => {
 router.get("/api/notes", async (req, res) => {
   try {
     const notes = await Notes.find();
-    const notesObject = notes.toObject();
-    delete notesObject["itemsCollections"];
     res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);
