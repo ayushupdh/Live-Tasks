@@ -55,7 +55,7 @@ socket.on("removedNote", () => {
 ///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch, getState) => {
-    const response = await axios.get("/notes/me", getAuthHeader(getState));
+    const response = await axios.get("/api/notes/me", getAuthHeader(getState));
     dispatch({
       type: GET_NOTES,
       payload: response.data,
@@ -65,7 +65,7 @@ export const getNotes = () => {
 
 export const updateNotes = () => {
   return async (dispatch, getState) => {
-    const response = await axios.get("/notes/me", getAuthHeader(getState));
+    const response = await axios.get("/api/notes/me", getAuthHeader(getState));
     dispatch({
       type: GET_NOTES,
       payload: response.data,
@@ -75,7 +75,7 @@ export const updateNotes = () => {
 export const updateNote = (noteId) => {
   return async (dispatch, getState) => {
     const response = await axios.get(
-      `/notes/${noteId}`,
+      `/api/notes/${noteId}`,
       getAuthHeader(getState)
     );
     console.log(response.data);
@@ -88,20 +88,24 @@ export const updateNote = (noteId) => {
 };
 export const addNote = () => {
   return async (dispatch, getState) => {
-    const response = await axios.post("/notes", {}, getAuthHeader(getState));
+    const response = await axios.post(
+      "/api/notes",
+      {},
+      getAuthHeader(getState)
+    );
 
     dispatch({
       type: ADD_NOTE,
       payload: response.data,
     });
-    history.push(`/notes/${response.data._id}`);
+    history.push(`/api/notes/${response.data._id}`);
   };
 };
 
 export const editTitle = (noteId, title) => {
   return async (dispatch, getState) => {
     const response = await axios.patch(
-      `/notes/${noteId}`,
+      `/api/notes/${noteId}`,
       { title },
       getAuthHeader(getState)
     );
@@ -117,7 +121,7 @@ export const editTitle = (noteId, title) => {
 
 export const removeNote = (noteId) => {
   return async (dispatch, getState) => {
-    await axios.delete(`/notes/${noteId}`, getAuthHeader(getState));
+    await axios.delete(`/api/notes/${noteId}`, getAuthHeader(getState));
     dispatch({
       type: REMOVE_NOTES,
       payload: noteId,
@@ -136,7 +140,7 @@ export const shareNotes = (noteId, userEmail) => {
     };
     try {
       const response = await axios.patch(
-        `/notes/share/${noteId}`,
+        `/api/notes/share/${noteId}`,
         body,
         getAuthHeader(getState)
       );
@@ -167,7 +171,7 @@ export const shareNotes = (noteId, userEmail) => {
 export const getItems = (noteId) => {
   return async (dispatch, getState) => {
     const response = await axios.get(
-      `/notes/${noteId}`,
+      `/api/notes/${noteId}`,
       getAuthHeader(getState)
     );
     console.log(response.data);
@@ -182,7 +186,7 @@ export const addItem = (noteId, item) => {
   const noteItem = { item: item };
   return async (dispatch, getState) => {
     const response = await axios.post(
-      `/notes/${noteId}`,
+      `/api/notes/${noteId}`,
       noteItem,
       getAuthHeader(getState)
     );
@@ -204,7 +208,7 @@ export const addItem = (noteId, item) => {
 export const editItem = (noteId, itemId, item) => {
   return async (dispatch, getState) => {
     const response = await axios.patch(
-      `/notes/${noteId}/${itemId}`,
+      `/api/notes/${noteId}/${itemId}`,
       item,
       getAuthHeader(getState)
     );
@@ -225,7 +229,10 @@ export const editItem = (noteId, itemId, item) => {
 
 export const removeItem = (noteId, itemId) => {
   return async (dispatch, getState) => {
-    await axios.delete(`/notes/${noteId}/${itemId}`, getAuthHeader(getState));
+    await axios.delete(
+      `/api/notes/${noteId}/${itemId}`,
+      getAuthHeader(getState)
+    );
     dispatch({
       type: REMOVE_ITEM,
       payload: itemId,

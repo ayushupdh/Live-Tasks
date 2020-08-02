@@ -13,7 +13,7 @@ import socket from "./socketHandler";
 //// LOAD USER /////
 export const loadUser = () => async (dispatch, getState) => {
   try {
-    const response = await axios.get("/users/me", getToken(getState));
+    const response = await axios.get("/api/users/me", getToken(getState));
 
     dispatch({
       type: LOAD_USER,
@@ -50,7 +50,7 @@ export const loadUser = () => async (dispatch, getState) => {
 export const signinUser = (userInfo) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post("/users/login", userInfo);
+      const response = await axios.post("/api/users/login", userInfo);
       console.log(response);
       if (response.status === 200) {
         dispatch({
@@ -77,7 +77,7 @@ export const signinUser = (userInfo) => {
 export const signupUser = (userInfo) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post("/users", userInfo);
+      const response = await axios.post("/api/users", userInfo);
       console.log(response.data);
       dispatch({
         type: SIGN_UP,
@@ -98,7 +98,7 @@ export const signoutUser = () => {
   return async (dispatch, getState) => {
     try {
       const header = getToken(getState);
-      const response = await axios.post("/users/logout", {}, header);
+      const response = await axios.post("/api/users/logout", {}, header);
       dispatch({
         type: SIGN_OUT,
         payload: response.data.user,

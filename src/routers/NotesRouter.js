@@ -10,7 +10,7 @@ const sharableFindQuery = (req) => {
 /////////////////     Notes       //////////////////////////////////
 
 //Create a note
-router.post("/notes", auth, async (req, res) => {
+router.post("/api/notes", auth, async (req, res) => {
   try {
     const notes = new Notes({ ...req.body, owner: req.user._id });
     await notes.save();
@@ -22,7 +22,7 @@ router.post("/notes", auth, async (req, res) => {
 });
 
 //Get all the notes
-router.get("/notes", async (req, res) => {
+router.get("/api/notes", async (req, res) => {
   try {
     const notes = await Notes.find();
     const notesObject = notes.toObject();
@@ -33,7 +33,7 @@ router.get("/notes", async (req, res) => {
   }
 });
 //Get all the notes of a user
-router.get("/notes/me", auth, async (req, res) => {
+router.get("/api/notes/me", auth, async (req, res) => {
   try {
     let notes = await Notes.find({ $or: sharableFindQuery(req) });
 
@@ -44,7 +44,7 @@ router.get("/notes/me", auth, async (req, res) => {
 });
 
 //Get all the items in the notes
-router.get("/notes/:id", auth, async (req, res) => {
+router.get("/api/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   try {
     const notes = await Notes.findOne({
@@ -62,7 +62,7 @@ router.get("/notes/:id", auth, async (req, res) => {
 });
 
 //Update Title
-router.patch("/notes/:id", auth, async (req, res) => {
+router.patch("/api/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   const note = await Notes.findOne({
     $and: [
@@ -86,7 +86,7 @@ router.patch("/notes/:id", auth, async (req, res) => {
 });
 
 //Delete the note
-router.delete("/notes/:id", auth, async (req, res) => {
+router.delete("/api/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   try {
     const note = await Notes.findOneAndDelete({
@@ -106,7 +106,7 @@ router.delete("/notes/:id", auth, async (req, res) => {
 /////////// USER SHARE   //////////////////
 
 //Update Sharable Status
-router.patch("/notes/share/:id", auth, async (req, res) => {
+router.patch("/api/notes/share/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   const updates = req.body;
   const note = await Notes.findOne({ _id: noteId, owner: req.user._id });
@@ -164,7 +164,7 @@ router.patch("/notes/share/:id", auth, async (req, res) => {
 });
 
 //Delete Sharable User
-router.delete("/notes/share/:id", auth, async (req, res) => {
+router.delete("/api/notes/share/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   const userId = req.body.user;
 
@@ -189,7 +189,7 @@ router.delete("/notes/share/:id", auth, async (req, res) => {
 /////////////////     Items in the note       //////////////////////////////////
 
 //Get an item
-router.get("/notes/:noteId/:itemId", auth, async (req, res) => {
+router.get("/api/notes/:noteId/:itemId", auth, async (req, res) => {
   const noteId = req.params.noteId;
   const itemId = req.params.itemId;
   try {
@@ -222,7 +222,7 @@ router.get("/notes/:noteId/:itemId", auth, async (req, res) => {
 });
 
 //Add an item to the notes
-router.post("/notes/:id", auth, async (req, res) => {
+router.post("/api/notes/:id", auth, async (req, res) => {
   const noteId = req.params.id;
   try {
     const notes = await Notes.findOne({
@@ -247,7 +247,7 @@ router.post("/notes/:id", auth, async (req, res) => {
 });
 
 //Update an item from the notes
-router.patch("/notes/:noteId/:itemId", auth, async (req, res) => {
+router.patch("/api/notes/:noteId/:itemId", auth, async (req, res) => {
   const noteId = req.params.noteId;
   const itemId = req.params.itemId;
   const updates = Object.keys(req.body);
@@ -288,7 +288,7 @@ router.patch("/notes/:noteId/:itemId", auth, async (req, res) => {
 });
 
 //Delete a note from the notes
-router.delete("/notes/:noteId/:itemId", auth, async (req, res) => {
+router.delete("/api/notes/:noteId/:itemId", auth, async (req, res) => {
   const noteId = req.params.noteId;
   const itemId = req.params.itemId;
   try {
