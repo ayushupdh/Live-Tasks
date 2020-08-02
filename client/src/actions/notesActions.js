@@ -98,7 +98,7 @@ export const addNote = () => {
       type: ADD_NOTE,
       payload: response.data,
     });
-    history.push(`/api/notes/${response.data._id}`);
+    history.push(`/notes/${response.data._id}`);
   };
 };
 
