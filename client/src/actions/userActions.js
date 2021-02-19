@@ -23,17 +23,17 @@ export const loadUser = () => async (dispatch, getState) => {
     if (user !== null) {
       socket.emit("userIdentify", { user }, (message) => {});
 
-      getState().noteList.forEach((note) => {
-        if (note.sharable === "true") {
-          socket.emit(
-            "joinNote",
-            { noteId: note._id, user: user },
-            (message) => {
-              console.log(message);
-            }
-          );
-        }
-      });
+      // getState().noteList.forEach((note) => {
+      //   if (note.sharable === "true") {
+      //     socket.emit(
+      //       "joinNote",
+      //       { noteId: note._id, user: user },
+      //       (message) => {
+      //         console.log(message);
+      //       }
+      //     );
+      //   }
+      // });
     } else {
       console.log("User not found");
     }

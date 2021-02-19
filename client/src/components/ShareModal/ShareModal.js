@@ -46,7 +46,7 @@ class ShareModal extends React.Component {
                   e.preventDefault();
                   this.props.toggleModalOpen();
                 }}
-                className=" m-2  p-2 px-4 btn btn-danger"
+                className=" m-2  p-2 px-4 btn btn-dark"
               >
                 Cancel
               </button>

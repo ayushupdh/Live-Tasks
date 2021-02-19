@@ -4,8 +4,10 @@ import { connect } from "react-redux";
 import AddItemsBar from "./AddItemsBar";
 import ItemsList from "./ItemsList";
 import history from "../../history";
-import { getNotes, editTitle } from "../../actions/notesActions";
+import { getItems, editTitle } from "../../actions/notesActions";
 import "./Notes.css";
+import equal from 'fast-deep-equal'
+
 class Notes extends Component {
   constructor() {
     super();
@@ -13,16 +15,22 @@ class Notes extends Component {
     this.state = { title: "" };
   }
   componentDidMount() {
-    if (!this.props.noteList) {
-      this.props.getNotes();
-    }
+    // this.props.getItems(this.props.noteId);
+    this.setState({ title: "" });
 
-    this.setState({ title: this.props.title });
   }
-  com;
+  componentDidUpdate(prevProps) {
+    if(!equal(this.props.title, prevProps.title)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+    {
+      this.setState({ title: this.props.title });
+    }
+  } 
+ 
+
+
   onEditHandler = (title) => {
     if (title === "") {
-      return this.props.editTitle(this.props.noteId, "Title");
+      return this.props.editTitle(this.props.noteId, "Note");
     }
     return this.props.editTitle(this.props.noteId, title);
   };
@@ -31,6 +39,7 @@ class Notes extends Component {
     history.push("/notes");
   };
   render() {
+    
     return ReactDOM.createPortal(
       <div onClick={this.closeNoteHelper} className="noteMainContainer">
         <div
@@ -44,7 +53,7 @@ class Notes extends Component {
                 value={this.state.title}
                 onChange={(e) => this.setState({ title: e.target.value })}
                 onBlur={(e) => this.onEditHandler(e.target.value)}
-                placeholder="Title"
+                placeholder="Note"
               ></input>
               <button
                 onClick={this.closeNoteHelper}
@@ -67,17 +76,11 @@ class Notes extends Component {
 }
 
 const mapStatetoProps = (state, ownProps) => {
-  // TODO FIND A BETTER WAY TO GET THE NOTE TITLE
-  let title = "";
-
-  for (let i = 0; i < state.noteList.length; i++) {
-    if (state.noteList[i]._id === ownProps.match.params.id) {
-      title = state.noteList[i].title;
-    }
-  }
+console.log('Inmap');
+console.log(state.note.title);
   return {
-    title,
+    title:state.note.title,
     noteId: ownProps.match.params.id,
   };
 };
-export default connect(mapStatetoProps, { getNotes, editTitle })(Notes);
+export default connect(mapStatetoProps, { getItems, editTitle })(Notes);

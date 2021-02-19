@@ -1,17 +1,21 @@
 import { GET_ITEMS, ADD_ITEM, EDIT_ITEM, REMOVE_ITEM } from "../actions/types";
-export default (items = [], action) => {
+
+const initialState = {title:'', itemslist:[]};
+export default (state = initialState, action) => {
   switch (action.type) {
     case GET_ITEMS:
       return action.payload;
     case ADD_ITEM:
-      return [...items, action.payload];
+      return {...state, itemsList: [...state.itemsList, action.payload]};
     case EDIT_ITEM:
-      return items.map((item) =>
-        item._id === action.payload._id ? (item = action.payload) : item
-      );
+      let itemsListArray= state.itemsList.map((item) =>
+      item._id === action.payload._id ? (item = action.payload) : item
+    );
+      return {title:state.title, itemsList: itemsListArray};
     case REMOVE_ITEM:
-      return items.filter((item) => item._id !== action.payload);
+      let itemsListArrayFiltered= state.itemsList.filter((item) => item._id !== action.payload);
+      return {title:state.title, itemsList: itemsListArrayFiltered};
     default:
-      return items;
+      return state;
   }
 };

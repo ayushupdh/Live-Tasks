@@ -20,7 +20,7 @@ class ItemsList extends Component {
   }
 
   generateItem = () => {
-    if (this.props.listItemArray.length === 0) {
+    if (!this.props.listItemArray || this.props.listItemArray.length === 0) {
       return <div className="addItemMessage">Add an Item to the List</div>;
     }
     return this.props.listItemArray.map((itemObject) => {
@@ -70,7 +70,7 @@ class ItemsList extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    listItemArray: state.note,
+    listItemArray: state.note.itemsList,
     noteId: ownProps.match.params.id,
   };
 };

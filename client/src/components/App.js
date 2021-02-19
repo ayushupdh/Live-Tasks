@@ -10,9 +10,52 @@ import { store } from "../store";
 import { connect } from "react-redux";
 import "./App.css";
 import { loadUser } from "../actions/userActions";
+import socket from "../actions/socketHandler";
+import { updateNotes, getItems, updateNote } from "../actions/notesActions";
+
 class App extends Component {
+
   componentDidMount() {
     store.dispatch(loadUser());
+
+       ////SOCKETIO//////
+
+socket.on("sharedNote", (data) => {
+  // console.log("Shared note" + data);
+  store.dispatch(updateNotes());
+
+  socket.emit("joinNote", { noteId: data, user: "id" }, (sent) => {
+    // console.log("join note");
+    
+  });
+});
+socket.on("message", (data) => {
+  // console.log(data);
+});
+
+socket.on("addedItemfromSomeone", (noteId) => {
+  store.dispatch(getItems(noteId));
+});
+socket.on("removedItemfromSomeone", ({ noteId, itemId }) => {
+  store.dispatch(getItems(noteId, itemId));
+});
+
+socket.on("editedItemfromSomeone", ({ noteId, itemId }) => {
+  // console.log('someone edited');
+  store.dispatch(getItems(noteId, itemId));
+});
+socket.on("editedTitlefromSomeone", (noteId) => {
+  // console.log("edit");
+  store.dispatch(updateNote(noteId));
+});
+
+socket.on("removedNote", () => {
+  // console.log("removed");
+  store.dispatch(updateNotes());
+});
+  }
+  componentWillUnmount(){
+    socket.removeAllListeners();
   }
   render() {
     return (

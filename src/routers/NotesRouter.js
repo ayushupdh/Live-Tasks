@@ -53,6 +53,7 @@ router.get("/api/notes/:id", auth, async (req, res) => {
         },
       ],
     });
+    console.log(notes);
     res.status(200).send(notes);
   } catch (e) {
     res.sendStatus(400);

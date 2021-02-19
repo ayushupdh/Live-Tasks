@@ -18,7 +18,7 @@ class DeleteModal extends React.Component {
               onClick={() => {
                 this.deleteNoteHelper();
               }}
-              className="m-2 btn btn-success"
+              className="m-2 btn btn-danger"
             >
               {this.props.btn1}
             </button>
@@ -26,7 +26,7 @@ class DeleteModal extends React.Component {
               onClick={() => {
                 this.props.toggleModal();
               }}
-              className=" m-2 btn btn-danger"
+              className=" m-2 btn btn-dark"
             >
               Cancel
             </button>

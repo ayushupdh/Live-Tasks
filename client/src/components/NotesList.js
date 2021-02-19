@@ -8,6 +8,9 @@ import { ReactComponent as Options } from "../icon/menu.svg";
 import DeleteModal from "./DeleteModal/DeleteModal";
 import "./NoteList.css";
 import { store } from "../store";
+import history from "../history";
+
+
 class NotesList extends Component {
   constructor() {
     super();
@@ -24,6 +27,7 @@ class NotesList extends Component {
   }
 
   componentDidMount() {
+ 
     this.props.getNotes();
   }
 
@@ -98,7 +102,6 @@ class NotesList extends Component {
         >
           Share
         </div>
-        <hr />
         <div
           className="menu-dropdown-item"
           onClick={() => {
@@ -115,6 +118,10 @@ class NotesList extends Component {
     );
   }
 
+  openNote = (noteID) => {
+    history.push(`/notes/${noteID}`);
+  };
+
   renderNotesList = () => {
     if (this.props.noteList.length === 0) {
       return <div>Press Create Notes to start creating notes</div>;
@@ -122,26 +129,27 @@ class NotesList extends Component {
     return this.props.noteList.map((note) => {
       return (
         <div
-          className="mb-2 shadow-sm border p-3  "
+          className="mb-2 shadow-sm border  "
           key={note._id}
           style={{ borderRadius: "100px", backgroundColor: "#fff" }}
         >
-          <div className="row">
+          <div className="row " style={{ cursor: "pointer" }}>
             {/* Note title */}
-            <div className="col-9 ">
-              <Link to={`/notes/${note._id}`} className=" h5 ml-3  text-body  ">
-                {note.title}
-              </Link>
+            <div
+              className="col-10 p-2 "
+              onClick={() => this.openNote(note._id)}
+            >
+              <div className="h5 ml-5 pt-1 ">{note.title}</div>
             </div>
             {/* Note Options */}
             <div
               ref={(node) => {
                 this.node = node;
               }}
-              className="col-3 "
+              className="col-2 p-2"
             >
               <div
-                className="menu-icon float-right"
+                className="menu-icon float-right mr-3"
                 onClick={() => this.handleMenuClick(note._id)}
               >
                 <Options />
@@ -162,14 +170,18 @@ class NotesList extends Component {
         <Header></Header>
         <div
           className="shadow-lg border p-5 "
-          style={{ borderRadius: "10px", backgroundColor: "#eeeeee" }}
+          style={{ borderRadius: "10px", backgroundColor: "#f8f8ff" }}
         >
           <div className="mb-4 ">
             <button
               type="button"
               onClick={this.createNoteHelper}
-              className="btn btn-success"
-              style={{ borderRadius: "100px" }}
+              className="btn "
+              style={{
+                borderRadius: "100px",
+                backgroundColor: "#092532",
+                color: "#99d8d0",
+              }}
             >
               Create Notes
             </button>

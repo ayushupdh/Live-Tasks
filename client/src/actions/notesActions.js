@@ -18,40 +18,7 @@ import {
   UPDATE_NOTE,
 } from "./types";
 
-////SOCKETIO//////
 
-socket.on("sharedNote", (data) => {
-  console.log("Shared note" + data);
-  store.dispatch(updateNotes());
-
-  socket.emit("joinNote", { noteId: data, user: "id" }, (sent) => {
-    console.log("join note");
-    // console.log(sent);
-  });
-});
-socket.on("message", (data) => {
-  console.log(data);
-});
-
-socket.on("addedItemfromSomeone", (noteId) => {
-  store.dispatch(getItems(noteId));
-});
-socket.on("removedItemfromSomeone", ({ noteId, itemId }) => {
-  store.dispatch(getItems(noteId, itemId));
-});
-
-socket.on("editedItemfromSomeone", ({ noteId, itemId }) => {
-  store.dispatch(getItems(noteId, itemId));
-});
-socket.on("editedTitlefromSomeone", (noteId) => {
-  console.log("edit");
-  store.dispatch(updateNote(noteId));
-});
-
-socket.on("removedNote", () => {
-  console.log("removed");
-  store.dispatch(updateNotes());
-});
 ///////////////    Notes ////////////////
 export const getNotes = () => {
   return async (dispatch, getState) => {
@@ -62,6 +29,7 @@ export const getNotes = () => {
     });
   };
 };
+
 
 export const updateNotes = () => {
   return async (dispatch, getState) => {
@@ -78,8 +46,8 @@ export const updateNote = (noteId) => {
       `/api/notes/${noteId}`,
       getAuthHeader(getState)
     );
-    console.log(response.data);
-    console.log("");
+    // console.log(response.data);
+    // console.log("");
     dispatch({
       type: UPDATE_NOTE,
       payload: response.data,
@@ -174,10 +142,13 @@ export const getItems = (noteId) => {
       `/api/notes/${noteId}`,
       getAuthHeader(getState)
     );
-    console.log(response.data);
+    socket.emit("joinNote", { noteId: noteId, user: "id" }, (sent) => {
+      // console.log("join note");
+      // console.log(sent);
+    });
     dispatch({
       type: GET_ITEMS,
-      payload: response.data.itemsCollections,
+      payload: {title:response.data.title, itemsList:response.data.itemsCollections},
     });
   };
 };
@@ -190,6 +161,8 @@ export const addItem = (noteId, item) => {
       noteItem,
       getAuthHeader(getState)
     );
+    // console.log('Item:');
+    // console.log(response.data);
     dispatch({
       type: ADD_ITEM,
       payload: response.data,

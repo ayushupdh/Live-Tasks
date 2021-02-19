@@ -43,7 +43,7 @@ io.on("connection", async (socket) => {
     const sharedUserPresent = await SocketUsers.findOne({
       userEmail: data.userEmail,
     });
-    console.log("Socket user present: " + sharedUserPresent);
+    // console.log("Socket user present: " + sharedUserPresent);
     // console.log("outside");
     if (sharedUserPresent) {
       // console.log("inside");
@@ -54,7 +54,7 @@ io.on("connection", async (socket) => {
     }
     // console.log("inside share 1");
     let rooms = Object.keys(socket.rooms);
-    // console.log(rooms); // [ <socket.id>, 'room 237' ]
+    console.log(rooms); // [ <socket.id>, 'room 237' ]
     cb("Note Share Complete");
   });
 
@@ -63,9 +63,10 @@ io.on("connection", async (socket) => {
     socket.join(data.noteId);
     // io.in(data.noteId).emit("message", `${data.user} has joined`);
     callback("Joined note");
+    // console.log('Joined Note');
     // console.log("inside join");
     let rooms = Object.keys(socket.rooms);
-    // console.log(rooms); // [ <socket.id>, 'room 237' ]
+    // console.log(socket.rooms); // [ <socket.id>, 'room 237' ]
   });
 
   socket.on("removeNote", (noteId, cb) => {
@@ -110,10 +111,11 @@ io.on("connection", async (socket) => {
     });
     callback("addedItem");
   });
+
   socket.on("editedItem", (data, callback) => {
     // data:{ noteId: '5eee6d6e6afdc8fbc4be1193', userEmail:email }
 
-    socket.broadcast.to(data.noteId).emit("editedItemfromSomeone", {
+    socket.to(data.noteId).emit("editedItemfromSomeone", {
       noteId: data.noteId,
       itemId: data.itemId,
     });

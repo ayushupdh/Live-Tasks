@@ -18,24 +18,25 @@
   width: 200px;
   transform: translateX(-45%);
   background-color: #fff;
-  border: 1px solid #999;
   border-radius: 5%;
-  padding: 0.5rem;
+  padding: 0.2rem;
   overflow: hidden;
+  box-shadow: 0 0 6px 1px rgb(80, 80, 82);
 }
 
 .menu-item {
   height: 50px;
   display: flex;
   align-items: center;
-  border-radius: 100px;
+  border-radius: 10px;
   transition: background 200ms;
   padding: 1.5rem;
+
   /* margin-left: 2rem; */
 }
 .menu-item:hover {
-  background-color: #76ead7;
-  color: #393e46;
+  background-color: #092532;
+  color: white;
   text-decoration: none;
   cursor: default;
 }
