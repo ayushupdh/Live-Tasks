@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "./Routing/privateRoute";
-import Notes from "./Items/Notes";
+import Notes from "./Notes/Items/Notes";
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 import history from "../redux/history";

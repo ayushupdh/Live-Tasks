@@ -38,7 +38,7 @@ export const loadUser = () => async (dispatch, getState) => {
       console.log("User not found");
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     // dispatch({
     //   type: SIGNUP_FAILED,
     //   payload: "User is Unauthenticated",
@@ -78,7 +78,7 @@ export const signupUser = (userInfo) => {
   return async (dispatch) => {
     try {
       const response = await axios.post("/api/users", userInfo);
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: SIGN_UP,
         payload: response.data,

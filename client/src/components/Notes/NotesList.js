@@ -120,7 +120,7 @@ class NotesList extends Component {
   openNote = (noteID) => {
     history.push(`/notes/${noteID}`);
   };
-
+// Find a better way to renderNotes List
   renderNotesList = () => {
     if (this.props.noteList.length === 0) {
       return <div>Press Create Notes to start creating notes</div>;
@@ -148,7 +148,7 @@ class NotesList extends Component {
               className="col-2 p-2"
             >
               <div
-                className="menu-icon float-right mr-3"
+                className="menu-icon float-right mr-4"
                 onClick={() => this.handleMenuClick(note._id)}
               >
                 <Options />
