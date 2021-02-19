@@ -2,28 +2,37 @@ import React, { Component } from "react";
 import { Field, reduxForm, SubmissionError } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { signinUser } from "../actions/userActions";
+import { signupUser } from "../../redux/actions/userActions";
 import "./Auth.css";
-class Login extends Component {
-  generateBoxes = ({ label, input, meta, type }) => {
+
+class SignUp extends Component {
+  generateBoxes = ({ label, input, type, meta: { touched, error } }) => {
     return (
-      <div className="p-2 ">
+      <div className="p-2">
         <label>{label}</label>
         <input
           {...input}
-          className="form-control"
           type={type}
+          className="form-control"
           autoComplete="on"
-        ></input>
-        {meta.error && meta.touched && (
-          <p className="text-danger m-0">{meta.error}</p>
-        )}
+        />
+        {error && touched && <p className="text-danger m-0">{error}</p>}
       </div>
     );
   };
 
   onSubmitHelper = (formValues) => {
-    if (!formValues.email) {
+    if (!formValues.name) {
+      throw new SubmissionError({
+        name: "Please enter name",
+        _error: "No Input Provided",
+      });
+    } else if (!formValues.username) {
+      throw new SubmissionError({
+        username: "Please enter username",
+        _error: "No Input Provided",
+      });
+    } else if (!formValues.email) {
       throw new SubmissionError({
         email: "Please enter email",
         _error: "No Input Provided",
@@ -34,9 +43,10 @@ class Login extends Component {
         _error: "No Input Provided",
       });
     } else {
-      this.props.signinUser(formValues);
+      this.props.signupUser(formValues);
     }
   };
+
   render() {
     return (
       <div className="MainContainer" style={{ backgroundColor: "#eeeeee" }}>
@@ -45,7 +55,12 @@ class Login extends Component {
           className="form-group"
           onSubmit={this.props.handleSubmit(this.onSubmitHelper)}
         >
-          <h4 className="text-center"> Login</h4>
+          <h4 className="text-center"> Sign Up</h4>
+          <Field
+            name="name"
+            component={this.generateBoxes}
+            label="Name"
+          ></Field>
           <Field
             name="email"
             type="email"
@@ -53,20 +68,26 @@ class Login extends Component {
             label="Email"
           ></Field>
           <Field
+            name="username"
+            component={this.generateBoxes}
+            label="UserName"
+          ></Field>
+          <Field
             name="password"
             type="password"
             component={this.generateBoxes}
             label="Password"
           ></Field>
-
-          {this.props.authError && this.props.anyTouched && (
-            <p className="text-danger">{this.props.authError}</p>
-          )}
-          <button className="btn btn-success btn-block mt-4">Login</button>
+          {/* <Field
+            name="re-password"
+            component={this.generateBoxes}
+            label="Retype Password"
+          ></Field> */}
+          <button className="btn btn-info btn-block mt-4">Sign Up</button>
         </form>
         <div className="">
-          <Link to="/signup" className="btn btn-info btn-block mt-4">
-            Sign Up Instead...
+          <Link to="/" className="btn btn-success btn-block">
+            Login Instead...
           </Link>
         </div>
       </div>
@@ -74,13 +95,8 @@ class Login extends Component {
   }
 }
 
-const mapStatetoProps = (state) => {
-  return {
-    authError: state.error,
-  };
-};
 const form = reduxForm({
   form: "AuthForm",
-})(Login);
+})(SignUp);
 
-export default connect(mapStatetoProps, { signinUser })(form);
+export default connect(null, { signupUser })(form);

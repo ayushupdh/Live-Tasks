@@ -2,16 +2,16 @@ import React, { Component } from "react";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from "./Routing/privateRoute";
 import Notes from "./Items/Notes";
-import Login from "./Login";
-import SignUp from "./SignUp";
-import history from "../history";
-import NotesList from "./NotesList";
-import { store } from "../store";
+import Login from "./Auth/Login";
+import SignUp from "./Auth/SignUp";
+import history from "../redux/history";
+import NotesList from "./Notes/NotesList";
+import { store } from "../redux/store";
 import { connect } from "react-redux";
 import "./App.css";
-import { loadUser } from "../actions/userActions";
-import socket from "../actions/socketHandler";
-import { updateNotes, getItems, updateNote } from "../actions/notesActions";
+import { loadUser } from "../redux/actions/userActions";
+import socket from "../redux/actions/socketHandler";
+import { updateNotes, getItems, updateNote } from "../redux/actions/notesActions";
 
 class App extends Component {
 

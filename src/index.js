@@ -6,7 +6,7 @@ const SocketUsers = require("./modals/socketUser");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
-const PORT = process.env.PORT || 3010;
+const PORT = process.env.PORT || 3020;
 
 const server = http.createServer(app);
 

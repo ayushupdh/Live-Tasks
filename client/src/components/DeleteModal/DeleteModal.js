@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
-import { removeNote } from "../../actions/notesActions";
+import { removeNote } from "../../redux/actions/notesActions";
 class DeleteModal extends React.Component {
   state = { noteId: this.props.id };
   deleteNoteHelper() {

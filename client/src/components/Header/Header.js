@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { signoutUser } from "../../actions/userActions";
+import { signoutUser } from "../../redux/actions/userActions";
 import ProfileDropDown from "./ProfileDropDown";
 
 class Header extends Component {

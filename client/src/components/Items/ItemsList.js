@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getItems, removeItem, editItem } from "../../actions/notesActions";
+import { getItems, removeItem, editItem } from "../../redux/actions/notesActions";
 
 class ItemsList extends Component {
   onClickRemove = (id) => {
@@ -14,10 +14,6 @@ class ItemsList extends Component {
     const completedChange = !completed ? true : false;
     this.props.editItem(this.props.noteId, id, { completed: completedChange });
   };
-
-  componentDidMount() {
-    this.props.getItems(this.props.noteId);
-  }
 
   generateItem = () => {
     if (!this.props.listItemArray || this.props.listItemArray.length === 0) {
@@ -69,6 +65,7 @@ class ItemsList extends Component {
   }
 }
 const mapStateToProps = (state, ownProps) => {
+
   return {
     listItemArray: state.note.itemsList,
     noteId: ownProps.match.params.id,

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
-import { shareNotes } from "../../actions/notesActions";
+import { shareNotes } from "../../redux/actions/notesActions";
 import "./ShareModal.css";
 
 class ShareModal extends React.Component {

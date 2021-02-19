@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from "react";
-import Header from "./Header/Header";
+import Header from "../Header/Header";
 import { connect } from "react-redux";
-import { addNote, getNotes, removeNote } from "../actions/notesActions";
-import { Link } from "react-router-dom";
-import ShareNote from "./ShareModal/ShareModal";
-import { ReactComponent as Options } from "../icon/menu.svg";
-import DeleteModal from "./DeleteModal/DeleteModal";
+import { addNote, getNotes, removeNote } from "../../redux/actions/notesActions";
+import ShareNote from "../ShareModal/ShareModal";
+import { ReactComponent as Options } from "../../icon/menu.svg";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import "./NoteList.css";
-import { store } from "../store";
-import history from "../history";
+import { store } from "../../redux/store";
+import history from "../../redux/history";
 
 
 class NotesList extends Component {

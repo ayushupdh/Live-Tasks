@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import AddItemsBar from "./AddItemsBar";
 import ItemsList from "./ItemsList";
-import history from "../../history";
-import { getItems, editTitle } from "../../actions/notesActions";
+import history from "../../redux/history";
+import { getItems, editTitle } from "../../redux/actions/notesActions";
 import "./Notes.css";
 import equal from 'fast-deep-equal'
 
@@ -15,8 +15,8 @@ class Notes extends Component {
     this.state = { title: "" };
   }
   componentDidMount() {
-    // this.props.getItems(this.props.noteId);
-    this.setState({ title: "" });
+    this.props.getItems(this.props.noteId);
+    // this.setState({ title: "" });
 
   }
   componentDidUpdate(prevProps) {
